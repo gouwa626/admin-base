@@ -1,30 +1,30 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <n-config-provider
+    :theme-overrides="themeOverrides"
+    :inline-theme-disabled="true"
+  >
+    <router-view />
+    <n-button @click="handelClick">a++</n-button>
+  </n-config-provider>
 </template>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script lang="ts" setup>
+import { reactive, ref } from '@vue/reactivity';
+import { NConfigProvider, GlobalThemeOverrides } from 'naive-ui';
+// 在这里全局配置naiveUi组件主题
+const themeOverrides: GlobalThemeOverrides = {};
+const a = ref(0);
+interface nameType {
+  name: number;
 }
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+const obj: nameType = reactive({
+  name: 55,
+});
+console.log(a.value);
+function handelClick() {
+  a.value++;
+  // obj.name = 55;
+  obj.name++;
+  console.log(a.value);
+  console.log('obj', obj.name);
 }
-</style>
+</script>

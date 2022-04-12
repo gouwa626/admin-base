@@ -6,7 +6,8 @@ request.interceptors.request.use((config) => {
 });
 request.interceptors.response.use((response) => {
   for (let index = 0; index < 10; index++) {
-    window.$msg.error('啥', {});
+    window.$message.error('啥');
+    window.$message.success('啥');
   }
 });
 export default request;

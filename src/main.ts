@@ -3,5 +3,11 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import { getConfig } from '@/config';
-getConfig();
-createApp(App).use(store).use(router).mount('#app');
+
+(async function () {
+  const conf = await getConfig();
+  const APP = createApp(App);
+  // 挂载配置文件
+  window.$conf = conf;
+  APP.use(store).use(router).mount('#app');
+})();

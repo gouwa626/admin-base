@@ -3,28 +3,48 @@
     :theme-overrides="themeOverrides"
     :inline-theme-disabled="true"
   >
-    <router-view />
-    <n-button @click="handelClick">a++</n-button>
+    <n-message-provider>
+      <router-view />
+      <n-button @click="getuserInfo">sada</n-button>
+      <naive-provider-content />
+    </n-message-provider>
   </n-config-provider>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from '@vue/reactivity';
-import { NConfigProvider, GlobalThemeOverrides } from 'naive-ui';
+import { getCurrentInstance, defineComponent, h } from 'vue';
+import { NConfigProvider, GlobalThemeOverrides, useMessage } from 'naive-ui';
+import type { MessageRenderMessage, MessageReactive } from 'naive-ui';
+import { userInfo } from './api/login';
 // 在这里全局配置naiveUi组件主题
 const themeOverrides: GlobalThemeOverrides = {};
-const a = ref(0);
-interface nameType {
-  name: number;
+
+function getuserInfo() {
+  userInfo().then((res) => {
+    console.log('-');
+  });
 }
-const obj: nameType = reactive({
-  name: 55,
+
+let messageReactive: MessageReactive | null = null;
+const NaiveProviderContent = defineComponent({
+  setup() {
+    window.$message = useMessage();
+    window.$msg = useMessage();
+    window.$msg.error = function (s: string) {
+      console.log('777');
+      if (!messageReactive) {
+        messageReactive = 666;
+        window.$message?.error(s, {
+          onAfterLeave: () => {
+            messageReactive = null;
+          },
+        });
+      } else {
+        return;
+      }
+    };
+  },
+  render() {
+    return h('div');
+  },
 });
-console.log(a.value);
-function handelClick() {
-  a.value++;
-  // obj.name = 55;
-  obj.name++;
-  console.log(a.value);
-  console.log('obj', obj.name);
-}
 </script>

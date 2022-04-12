@@ -1,14 +1,15 @@
 import axios from 'axios';
+/**
+ * @description: 获取配置文件
+ * @param {*}
+ * @return 配置文件json
+ */
 export function getConfig() {
-  console.log(process.env);
   if (process.env.NODE_ENV == 'development') {
-    // return require('./dev.json');
-    axios.get('./prod.json').then((res) => {
-      console.log(res);
-    });
+    return require('./dev.json');
   } else {
     axios.get('/config.json').then((res) => {
-      console.log(res);
+      return res;
     });
   }
 }

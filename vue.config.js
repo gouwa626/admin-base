@@ -1,11 +1,8 @@
 const { defineConfig } = require('@vue/cli-service');
 const { NaiveUiResolver } = require('unplugin-vue-components/resolvers');
-const GenerateAssetPlugin = require('./generate');
+const GenerateAssetWebpackPluginForWebpack5 = require('generate-asset-webpack-plugin-forwebpack5');
+// build时构建配置文件
 const configJson = require('./src/config/prod.json');
-// 构建配置文件
-let createConfig = function () {
-  return JSON.stringify(configJson);
-};
 module.exports = defineConfig({
   devServer: {},
   transpileDependencies: true,
@@ -14,10 +11,10 @@ module.exports = defineConfig({
       require('unplugin-vue-components/webpack')({
         resolvers: [NaiveUiResolver()],
       }),
-      new GenerateAssetPlugin({
+      new GenerateAssetWebpackPluginForWebpack5({
         filename: 'config.json',
         fn: (compilation, cb) => {
-          cb(null, createConfig(compilation));
+          cb(null, JSON.stringify(configJson));
         },
       }),
     ],

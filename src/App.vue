@@ -17,7 +17,6 @@ import { defineComponent, h } from 'vue';
 import { NConfigProvider, GlobalThemeOverrides } from 'naive-ui';
 import { registerNaiveTools } from '@/utils/nativeTools';
 import { useThemeStore, subscribeThemeStore } from '@/store';
-import { darkTheme } from 'naive-ui';
 // 在这里全局配置naiveUi组件主题
 const themeOverrides: GlobalThemeOverrides = {};
 

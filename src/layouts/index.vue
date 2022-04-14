@@ -15,7 +15,6 @@
     <icon-mdi-alert-circle />
     <icon-custom-wind style="font-size: 400px" />
     <icon-system-uicons-external />
-    icon-custom-wind
   </n-space>
   <n-dropdown :options="options">
     <n-button type="primary"> 你像只鱼儿 </n-button>

@@ -9,6 +9,7 @@ declare module 'vue' {
     IconMdiAlertCircle: typeof import('~icons/mdi/alert-circle')['default']
     IconMdiGithub: typeof import('~icons/mdi/github')['default']
     IconMdiGithubFace: typeof import('~icons/mdi/github-face')['default']
+    IconMdiWallSconce: typeof import('~icons/mdi/wall-sconce')['default']
     IconSystemUiconsExternal: typeof import('~icons/system-uicons/external')['default']
     NButton: typeof import('naive-ui')['NButton']
     NDropdown: typeof import('naive-ui')['NDropdown']

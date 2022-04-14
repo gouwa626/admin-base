@@ -31,6 +31,5 @@ const NaiveProviderContent = defineComponent({
   },
 });
 const theme = useThemeStore();
-console.log(theme.nativeTheme);
 subscribeThemeStore();
 </script>

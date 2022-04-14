@@ -17,7 +17,6 @@ export const useThemeStore = defineStore('theme-store', {
     },
     // 切换黑色主题
     toggleDarkMode() {
-      console.log(this.nativeTheme);
       this.darkMode = !this.darkMode;
     },
   },

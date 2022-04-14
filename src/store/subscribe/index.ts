@@ -25,7 +25,6 @@ export function subscribeThemeStore() {
   const stopOsTheme = watch(
     osTheme,
     (newValue) => {
-      console.log('操作系统主题', newValue);
       const isDark = newValue == 'dark';
       theme.setDarkMode(isDark);
     },

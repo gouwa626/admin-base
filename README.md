@@ -1,29 +1,16 @@
 # admin-base
 
-## Project setup
+### icon使用教程：
 
-```
-npm install
-```
+icon 网站icon使用方法   [icon获取地址](https://icones.netlify.app/)  
 
-### Compiles and hot-reloads for development
-
-```
-npm run serve
+```javascript
+<icon-mdi-github />
 ```
 
-### Compiles and minifies for production
+项目本地icon，需将svg放在<u>src/assets/svg</u>使用方法:
 
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
+```javascript
+<icon-custom-banner/>
 ```
 
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).

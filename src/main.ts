@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import { getConfig } from '@/config';
 import { createPinia } from 'pinia';
-
+import '@/style/index.scss';
 (async function () {
   const conf = await getConfig();
   // 挂载配置文件

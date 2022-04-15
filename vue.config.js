@@ -8,12 +8,20 @@ const GenerateAssetWebpackPluginForWebpack5 = require('generate-asset-webpack-pl
 // build时构建配置文件
 const configJson = require('./src/config/prod.json');
 module.exports = defineConfig({
+  css: {
+    loaderOptions: {
+      sass: {
+        additionalData: '@import "~@/style/variables.scss";',
+      },
+    },
+  },
   devServer: {},
-  transpileDependencies: true,
   configureWebpack: {
     plugins: [
       // 自动挂载组件
       Components({
+        dirs: ['src/components'],
+        dts: true,
         resolvers: [
           NaiveUiResolver(),
           IconsResolver({

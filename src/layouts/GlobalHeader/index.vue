@@ -7,9 +7,7 @@
   </DarkModeContainer>
 </template>
 
-<script setup lang="ts">
-import { defineComponent, ref } from 'vue';
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .global-header {

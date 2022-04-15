@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     NTag: typeof import('naive-ui')['NTag']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TestAuto: typeof import('./src/components/TestAuto.vue')['default']
   }
 }
 

@@ -6,20 +6,30 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     DarkModeContainer: typeof import('./src/components/common/DarkModeContainer.vue')['default']
+    DarkModeSwitch: typeof import('./src/components/common/DarkModeSwitch.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     HomeItem: typeof import('./src/components/HomeItem.vue')['default']
+    HoverContainer: typeof import('./src/components/common/HoverContainer.vue')['default']
+    'Icon:mdiMoonWaningCrescent': typeof import('~icons/mdi/moon-waning-crescent')['default']
+    'Icon:mdiWhiteBalanceSunny': typeof import('~icons/mdi/white-balance-sunny')['default']
+    IconLineMdMenuFoldLeft: typeof import('~icons/line-md/menu-fold-left')['default']
+    IconLineMdMenuUnfoldLeft: typeof import('~icons/line-md/menu-unfold-left')['default']
+    IconMdiDragHorizontal: typeof import('~icons/mdi/drag-horizontal')['default']
+    IconMdiDragVertical: typeof import('~icons/mdi/drag-vertical')['default']
+    'IconPh:airplaneTiltFill': typeof import('~icons/ph/airplane-tilt-fill')['default']
     NAffix: typeof import('naive-ui')['NAffix']
     NaiveProvider: typeof import('./src/components/common/NaiveProvider.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
     NEmpty: typeof import('naive-ui')['NEmpty']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
     NLoadingBarProvider: typeof import('naive-ui')['NLoadingBarProvider']
+    NMenu: typeof import('naive-ui')['NMenu']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NProgress: typeof import('naive-ui')['NProgress']
-    NTag: typeof import('naive-ui')['NTag']
+    NScrollbar: typeof import('naive-ui')['NScrollbar']
+    NTooltip: typeof import('naive-ui')['NTooltip']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TestAuto: typeof import('./src/components/TestAuto.vue')['default']
   }
 }
 

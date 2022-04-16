@@ -1,10 +1,24 @@
 <template>
-  <div class="container">
+  <DarkModeContainer class="container">
     <slot></slot>
-  </div>
+  </DarkModeContainer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { defineComponent, h } from 'vue';
+interface Props {
+  // 渲染标签
+  tag?: string;
+}
+const props = withDefaults(defineProps<Props>(), {
+  tag: 'div',
+});
+const DarkModeContainer = defineComponent({
+  render() {
+    return h(props.tag, {}, this.$slots);
+  },
+});
+</script>
 <style scoped lang="scss">
 .container {
   color: #333639;

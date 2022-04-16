@@ -1,0 +1,23 @@
+.w-full{
+  width: 100%;
+}
+.h-full{
+  height: 100%;
+}
+.wh-full{
+  width: 100%;
+  height: 100%;
+}
+.flex-center{
+  display:flex;
+  align-items: center; 
+  justify-content: center;
+}
+.flex-x-center{
+  display: flex;
+  justify-content: center;
+}
+.flex-y-center{
+  display:flex;
+  align-items: center;
+}

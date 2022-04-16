@@ -2,11 +2,23 @@
   <DarkModeContainer
     class="global-sider"
     tag="aside"
-    :style="[`width:${isVertical ? (isCollapse ? '220' : '48') : '0'}px;`]"
+    :style="[
+      `width:${
+        isVertical
+          ? isCollapse
+            ? theme.siderNormalWidth
+            : theme.siderCollapseWidth
+          : '0'
+      }px;`,
+    ]"
   >
     <GlobalLogo :show-title="isCollapse" v-if="isVertical"></GlobalLogo>
     <n-scrollbar>
-      <n-menu :options="menuOptions" :collapsed="theme.siderCollapse" />
+      <n-menu
+        :options="menuOptions"
+        :collapsed="theme.siderCollapse"
+        :collapsed-width="theme.siderCollapseWidth"
+      />
     </n-scrollbar>
   </DarkModeContainer>
 </template>

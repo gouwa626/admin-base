@@ -7,6 +7,8 @@ export const useThemeStore = defineStore('theme-store', {
     return {
       darkMode: false,
       siderCollapse: false,
+      siderNormalWidth: 220,
+      siderCollapseWidth: 48,
       layout: {
         minWidth: 900,
         // 默认布局
@@ -42,6 +44,9 @@ export const useThemeStore = defineStore('theme-store', {
     //折叠/展开 侧边栏折叠状态
     toggleSiderCollapse() {
       this.siderCollapse = !this.siderCollapse;
+    },
+    setWidth(width: number) {
+      this.siderNormalWidth = width;
     },
   },
 });

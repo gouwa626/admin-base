@@ -11,6 +11,10 @@ declare namespace Theme {
     layout: Layout;
     //侧边栏折叠状态
     siderCollapse: boolean;
+    //侧边栏折叠状态宽度
+    siderCollapseWidth: number;
+    //侧边栏展开状态宽度
+    siderNormalWidth: number;
   }
   interface Layout {
     //最小宽度

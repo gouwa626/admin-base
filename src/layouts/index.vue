@@ -1,9 +1,9 @@
 <template>
   <div class="layout" :style="`min-width:${theme.layout.minWidth}px`">
-    <GlobalHeader></GlobalHeader>
-    <GlobalSider v-if="isVertical"></GlobalSider>
-    <GlobalContent></GlobalContent>
-    <GlobalFooter></GlobalFooter>
+    <global-header></global-header>
+    <global-sider v-if="isVertical"></global-sider>
+    <global-content></global-content>
+    <global-footer></global-footer>
   </div>
 </template>
 

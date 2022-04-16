@@ -2,7 +2,13 @@
   <DarkModeContainer
     class="global-footer flex-center h-full"
     :style="[
-      `padding-left:${isVertical ? (isCollapse ? '220' : '48') : '0'}px;`,
+      `padding-left:${
+        isVertical
+          ? isCollapse
+            ? theme.siderNormalWidth
+            : theme.siderCollapseWidth
+          : '0'
+      }px;`,
     ]"
     tag="footer"
   >

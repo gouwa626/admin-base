@@ -1,30 +1,16 @@
+import { constantRoutes } from './routes/index';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Layout from '@/layouts/index.vue';
 
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'Layout',
-    redirect: 'home',
-    component: Layout,
-    children: [
-      {
-        path: 'home',
-        name: 'home',
-        component: () => import('@/views/Home.vue'),
-      },
-      {
-        path: 'about',
-        name: 'about',
-        component: () => import('@/views/About.vue'),
-      },
-    ],
-  },
-];
+import { App } from 'vue';
+import { createRouterGuard } from './guard';
 
-const router = createRouter({
+const routes: Array<RouteRecordRaw> = constantRoutes;
+
+export const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
-
-export default router;
+export async function setupRouter(app: App) {
+  app.use(router);
+  createRouterGuard(router);
+}

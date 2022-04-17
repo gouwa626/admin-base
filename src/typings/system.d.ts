@@ -1,5 +1,8 @@
 declare namespace EnumType {
+  // 布局模式
   type ThemeLayoutMode = keyof typeof import('@/enum').EnumThemeLayoutMode;
+  // 过度动画
+  type ThemeAnimateMode = keyof typeof import('@/enum').EnumThemeAnimateMode;
 }
 //主题相关类型
 declare namespace Theme {
@@ -15,6 +18,9 @@ declare namespace Theme {
     siderCollapseWidth: number;
     //侧边栏展开状态宽度
     siderNormalWidth: number;
+
+    // 页面相关
+    page: Page;
   }
   interface Layout {
     //最小宽度
@@ -24,9 +30,18 @@ declare namespace Theme {
     //布局模式列表
     modeList: LayoutModeList[];
   }
+  interface Page {
+    animate: boolean;
+    animateMode: EnumType.ThemeAnimateMode;
+    animateModeList: AnimateModeList[];
+  }
   interface LayoutModeList {
     value: EnumType.ThemeLayoutMode;
     label: import('@/enum').EnumThemeLayoutMode;
+  }
+  interface AnimateModeList {
+    value: EnumType.ThemeAnimateMode;
+    label: import('@/enum').EnumThemeAnimateMode;
   }
 }
 declare namespace Conf {

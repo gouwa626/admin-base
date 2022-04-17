@@ -1,5 +1,5 @@
 <template>
-  <HoverContainer tooltip-content="菜单布局" class="layout-class">
+  <HoverContainer tooltip-content="菜单布局" class="layout-class h-full">
     <div class="flex-center wh-full" @click="handelLayoutMode">
       <icon-mdi-drag-vertical v-if="isVertical" />
       <icon-mdi-drag-horizontal v-else />

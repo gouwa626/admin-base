@@ -1,5 +1,5 @@
 <template>
-  <HoverContainer tooltip-content="主题模式" class="hover-class">
+  <HoverContainer tooltip-content="主题模式" class="hover-class h-full">
     <DarkModeSwitch
       :dark="theme.darkMode"
       class="wh-full"

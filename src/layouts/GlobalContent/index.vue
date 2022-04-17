@@ -12,7 +12,15 @@
     ]"
     tag="main"
   >
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <transition
+        :name="theme.page.animate ? theme.page.animateMode : undefined"
+        mode="out-in"
+        appear
+      >
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </DarkModeContainer>
 </template>
 

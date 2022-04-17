@@ -1,6 +1,6 @@
 import { darkTheme } from 'naive-ui';
 import { defineStore } from 'pinia';
-import { EnumThemeLayoutMode } from '@/enum';
+import { EnumThemeLayoutMode, EnumThemeAnimateMode } from '@/enum';
 type ThemeState = Theme.Setting;
 export const useThemeStore = defineStore('theme-store', {
   state: (): ThemeState => {
@@ -16,6 +16,17 @@ export const useThemeStore = defineStore('theme-store', {
         modeList: [
           { value: 'vertical', label: EnumThemeLayoutMode.vertical },
           { value: 'horizontal', label: EnumThemeLayoutMode.horizontal },
+        ],
+      },
+      page: {
+        animate: true,
+        animateMode: 'fade-slide',
+        animateModeList: [
+          { value: 'fade-slide', label: EnumThemeAnimateMode['fade-slide'] },
+          { value: 'fade', label: EnumThemeAnimateMode['fade'] },
+          { value: 'fade-bottom', label: EnumThemeAnimateMode['fade-bottom'] },
+          { value: 'fade-scale', label: EnumThemeAnimateMode['fade-scale'] },
+          { value: 'zoom-fade', label: EnumThemeAnimateMode['zoom-fade'] },
         ],
       },
     };
@@ -34,7 +45,12 @@ export const useThemeStore = defineStore('theme-store', {
     toggleDarkMode() {
       this.darkMode = !this.darkMode;
     },
+    // 修改布局模式
     setLayoutMode(mode: EnumType.ThemeLayoutMode) {
+      // 修改为顶部布局时，强制展开菜单
+      if (mode == 'horizontal') {
+        this.siderCollapse = false;
+      }
       this.layout.mode = mode;
     },
     //设置侧边栏折叠状态

@@ -1,9 +1,11 @@
 <template>
   <n-loading-bar-provider>
     <n-message-provider>
-      <n-global-style />
-      <slot></slot>
-      <naive-provider-content />
+      <n-dialog-provider>
+        <n-global-style />
+        <slot></slot>
+        <naive-provider-content />
+      </n-dialog-provider>
     </n-message-provider>
   </n-loading-bar-provider>
 </template>

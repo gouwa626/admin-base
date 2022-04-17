@@ -1,6 +1,6 @@
 <template>
   <n-affix :top="0" :trigger-top="0" position="fix" class="affix">
-    <DarkModeContainer
+    <dark-mode-container
       class="global-header"
       :style="[
         `padding-left:${
@@ -13,26 +13,30 @@
       ]"
       tag="header"
     >
-      <GlobalLogo
+      <global-logo
         :show-title="true"
         v-if="!isVertical"
         style="width: 220px"
-      ></GlobalLogo>
-      <MenuCollapse v-else></MenuCollapse>
-      <div class="header-left">asdad</div>
-      <div class="header-right">
-        <LayoutMode></LayoutMode>
-        <ThemeMode></ThemeMode>
+      ></global-logo>
+      <menu-collapse v-else></menu-collapse>
+      <div class="header-left">
+        <menu-provider v-if="!isVertical"></menu-provider>
       </div>
-    </DarkModeContainer>
+      <div class="header-right">
+        <layout-mode></layout-mode>
+        <theme-mode></theme-mode>
+        <user-avatar></user-avatar>
+      </div>
+    </dark-mode-container>
   </n-affix>
 </template>
 
 <script setup lang="ts">
 import { useThemeStore } from '@/store';
 import { computed } from 'vue';
-import { LayoutMode, ThemeMode, MenuCollapse } from './components';
-import GlobalLogo from '../GlobalLogo/index.vue';
+import { LayoutMode, ThemeMode, MenuCollapse, UserAvatar } from './components';
+import GlobalLogo from '@/layouts/GlobalLogo/index.vue';
+import MenuProvider from '@/components/common/MenuProvider.vue';
 const theme = useThemeStore();
 const isVertical = computed(() => theme.layout.mode == 'vertical');
 const isCollapse = computed(() => !theme.siderCollapse);
@@ -70,6 +74,7 @@ const isCollapse = computed(() => !theme.siderCollapse);
   .header-right {
     height: 100%;
     display: flex;
+    align-items: center;
     justify-content: flex-end;
   }
 }

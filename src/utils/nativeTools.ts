@@ -1,4 +1,4 @@
-import { useMessage, useLoadingBar, MessageType } from 'naive-ui';
+import { useMessage, useLoadingBar, MessageType, useDialog } from 'naive-ui';
 import type { MessageReactive, MessageOptions } from 'naive-ui';
 
 // 挂载naive组件的方法至window, 以便在路由钩子函数和请求函数里面调用
@@ -9,6 +9,7 @@ export function registerNaiveTools() {
   window.$loadingBar = useLoadingBar();
   const message = useMessage();
   window.$message = useMessage();
+  window.$dialog = useDialog();
   types.forEach((type) => {
     window.$message[type] = (s: string, options: MessageOptions) => {
       if (!messageReactive) {

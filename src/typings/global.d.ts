@@ -1,5 +1,6 @@
 interface Window {
   $conf: Conf;
+  $dialog?: import('naive-ui').DialogProviderInst;
   $loadingBar?: import('naive-ui').LoadingBarProviderInst;
   $message: MessageType;
 }

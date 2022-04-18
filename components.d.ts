@@ -5,6 +5,7 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BasicModal: typeof import('./src/components/Modal/src/basicModal.vue')['default']
     DarkModeContainer: typeof import('./src/components/common/DarkModeContainer.vue')['default']
     DarkModeSwitch: typeof import('./src/components/common/DarkModeSwitch.vue')['default']
     HomeItem: typeof import('./src/components/HomeItem.vue')['default']
@@ -20,14 +21,18 @@ declare module '@vue/runtime-core' {
     MenuProvider: typeof import('./src/components/common/MenuProvider.vue')['default']
     NAffix: typeof import('naive-ui')['NAffix']
     NaiveProvider: typeof import('./src/components/common/NaiveProvider.vue')['default']
+    NAlert: typeof import('naive-ui')['NAlert']
     NButton: typeof import('naive-ui')['NButton']
+    NCard: typeof import('naive-ui')['NCard']
     NDataTable: typeof import('naive-ui')['NDataTable']
     NDialogProvider: typeof import('naive-ui')['NDialogProvider']
+    NDivider: typeof import('naive-ui')['NDivider']
     NDropdown: typeof import('naive-ui')['NDropdown']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
     NLoadingBarProvider: typeof import('naive-ui')['NLoadingBarProvider']
     NMenu: typeof import('naive-ui')['NMenu']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
+    NModal: typeof import('naive-ui')['NModal']
     NScrollbar: typeof import('naive-ui')['NScrollbar']
     NSpace: typeof import('naive-ui')['NSpace']
     NTooltip: typeof import('naive-ui')['NTooltip']

@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <n-button type="primary" @click="router.push('/about')">
-      goAboutPage
-    </n-button>
+    <n-button type="primary" @click="router.push('/about')"> goAboutPage </n-button>
   </div>
 </template>
 

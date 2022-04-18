@@ -1,8 +1,5 @@
 <template>
-  <n-config-provider
-    :theme="theme.nativeTheme"
-    :theme-overrides="themeOverrides"
-  >
+  <n-config-provider :theme="theme.nativeTheme" :theme-overrides="themeOverrides">
     <NaiveProvider>
       <router-view />
     </NaiveProvider>

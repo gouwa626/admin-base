@@ -21,11 +21,11 @@
 
 <script setup lang="ts">
 import { useThemeStore } from '@/store';
-import { computed } from 'vue-demi';
+import { computed } from 'vue';
 import GlobalLogo from '@/layouts/GlobalLogo/index.vue';
 import MenuProvider from '@/components/common/MenuProvider.vue';
 const theme = useThemeStore();
-const isVertical = computed(() => (theme.layout.mode = 'vertical'));
+const isVertical = computed(() => theme.layout.mode == 'vertical');
 const isCollapse = computed(() => !theme.siderCollapse);
 </script>
 

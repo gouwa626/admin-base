@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, h } from 'vue-demi';
+import { computed, h } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { useThemeStore } from '@/store';
 import { iconifyRender } from '@/utils';

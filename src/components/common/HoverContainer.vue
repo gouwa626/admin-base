@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue-demi';
+import { computed } from 'vue';
 import type { FollowerPlacement } from 'vueuc';
 interface Props {
   // tooltip显示文本

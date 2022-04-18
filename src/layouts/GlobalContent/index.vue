@@ -5,8 +5,8 @@
       `padding-left:${
         isVertical
           ? isCollapse
-            ? theme.siderNormalWidth
-            : theme.siderCollapseWidth
+            ? theme.siderNormalWidth + 20
+            : theme.siderCollapseWidth + 20
           : '0'
       }px;`,
     ]"
@@ -38,7 +38,7 @@ const isCollapse = computed(() => !theme.siderCollapse);
   flex-grow: 1;
   box-sizing: border-box;
   width: 100%;
-  padding-top: 56px;
+  padding-top: 76px;
   padding-bottom: 0px;
   transition-property: all;
   transition-duration: 300ms;

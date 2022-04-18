@@ -21,7 +21,7 @@ const menuOptions: MenuOption[] = [
   {
     label: '鱼',
     key: 'fish',
-    icon: iconifyRender('mdi:account-circle'),
+    icon: iconifyRender('mdi:abacus'),
     children: [
       {
         label: () =>
@@ -54,7 +54,7 @@ const menuOptions: MenuOption[] = [
   {
     label: '熊掌',
     key: 'bear-paw',
-    icon: iconifyRender('mdi:account-circle'),
+    icon: iconifyRender('mdi:access-point-network'),
     children: [
       {
         label: '保护野生动物',
@@ -65,7 +65,7 @@ const menuOptions: MenuOption[] = [
   {
     label: '两个都要',
     key: 'both',
-    icon: iconifyRender('mdi:account-circle'),
+    icon: iconifyRender('mdi:television-ambient-light'),
     children: [
       {
         label: '鱼和熊掌不可兼得',

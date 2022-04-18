@@ -57,8 +57,17 @@ const menuOptions: MenuOption[] = [
     icon: iconifyRender('mdi:access-point-network'),
     children: [
       {
-        label: '保护野生动物',
-        key: 'protect-wild-animals',
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: 'test',
+              },
+            },
+            { default: () => '测试' }
+          ),
+        key: 'test',
       },
     ],
   },

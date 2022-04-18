@@ -45,6 +45,7 @@ const isCollapse = computed(() => !theme.siderCollapse);
 <style scoped lang="scss">
 .affix {
   width: 100%;
+  z-index: 1001;
 }
 .global-header {
   // position: fixed;

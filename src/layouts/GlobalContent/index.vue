@@ -7,7 +7,7 @@
           ? isCollapse
             ? theme.siderNormalWidth + 20
             : theme.siderCollapseWidth + 20
-          : '0'
+          : 20
       }px;`,
     ]"
     tag="main"
@@ -39,6 +39,7 @@ const isCollapse = computed(() => !theme.siderCollapse);
   box-sizing: border-box;
   width: 100%;
   padding-top: 76px;
+  padding-right: 20px;
   padding-bottom: 0px;
   transition-property: all;
   transition-duration: 300ms;

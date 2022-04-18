@@ -18,6 +18,11 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: 'about',
         component: () => import('@/views/About/index.vue'),
       },
+      {
+        path: 'test',
+        name: 'test',
+        component: () => import('@/views/Test/index.vue'),
+      },
     ],
   },
 ];

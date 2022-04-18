@@ -3,51 +3,73 @@
     remote
     ref="table"
     :columns="columns"
-    :data="dataRef"
-    :loading="loadingRef"
-    :pagination="paginationReactive"
+    :data="data"
+    :loading="loading"
+    :pagination="pagination"
     :row-key="rowKey"
+    @update:sorter="handleSorterChange"
+    @update:filters="handleFiltersChange"
     @update:page="handlePageChange"
   />
 </template>
 
-<script lang="ts" setup>
+<script>
 import { defineComponent, ref, reactive, onMounted } from 'vue';
 
+const column1 = {
+  title: 'column1',
+  key: 'column1',
+  sorter: true,
+  sortOrder: false,
+};
+
+const column2 = {
+  title: 'column2',
+  key: 'column2',
+  filter: true,
+  filterOptionValues: [],
+  filterOptions: [
+    {
+      label: 'Value1',
+      value: 1,
+    },
+    {
+      label: 'Value2',
+      value: 2,
+    },
+  ],
+};
+
 const columns = [
+  column1,
+  column2,
   {
-    title: 'id',
-    key: 'id',
-  },
-  {
-    title: 'Address',
-    key: 'address',
-  },
-  {
-    title: 'name',
-    key: 'name',
-  },
-  {
-    title: 'age',
-    key: 'age',
+    title: '"Co(\'lum\')n3"',
+    key: 'column3',
   },
 ];
 
-function query(page, pageSize = 10) {
+const data = Array.apply(null, { length: 987 }).map((_, index) => {
+  return {
+    column1: index,
+    column2: (index % 2) + 1,
+    column3: 'a' + index,
+  };
+});
+
+function query(page, pageSize = 10, order = 'ascend', filterValues = []) {
   return new Promise((resolve) => {
-    let temp = [];
-    for (let i = 0; i < 10; i++) {
-      temp.push({
-        id: `page${page}-${i}`,
-        name: 'John Brown',
-        age: 32 + i,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      });
-    }
-    const pagedData = temp;
-    const total = 1000;
-    const pageCount = Math.ceil(total / pageSize);
+    const copiedData = data.map((v) => v);
+    const orderedData = order === 'descend' ? copiedData.reverse() : copiedData;
+    const filteredData = filterValues.length
+      ? orderedData.filter((row) => filterValues.includes(row.column2))
+      : orderedData;
+    const pagedData = filteredData.slice(
+      (page - 1) * pageSize,
+      page * pageSize
+    );
+    const total = filteredData.length;
+    const pageCount = Math.ceil(filteredData.length / pageSize);
     setTimeout(
       () =>
         resolve({
@@ -55,44 +77,106 @@ function query(page, pageSize = 10) {
           data: pagedData,
           total,
         }),
-      500
+      1500
     );
   });
 }
-const loading = ref(false);
-const dataRef = ref([]);
-const loadingRef = ref(true);
-const paginationReactive = reactive({
-  page: 1,
-  pageCount: 1,
-  pageSize: 10,
-  prefix({ itemCount }) {
-    return `Total is ${itemCount}.`;
+
+export default defineComponent({
+  setup() {
+    const dataRef = ref([]);
+    const loadingRef = ref(true);
+    const columnsRef = ref(columns);
+    const column1Reactive = reactive(column1);
+    const column2Reactive = reactive(column2);
+    const paginationReactive = reactive({
+      page: 1,
+      pageCount: 1,
+      pageSize: 10,
+      prefix({ itemCount }) {
+        return `Total is ${itemCount}.`;
+      },
+    });
+
+    onMounted(() => {
+      query(
+        paginationReactive.page,
+        paginationReactive.pageSize,
+        column1Reactive.sortOrder,
+        column2Reactive.filterOptionValues
+      ).then((data) => {
+        dataRef.value = data.data;
+        paginationReactive.pageCount = data.pageCount;
+        paginationReactive.itemCount = data.total;
+        loadingRef.value = false;
+      });
+    });
+
+    return {
+      data: dataRef,
+      columns: columnsRef,
+      column1: column1Reactive,
+      column2: column2Reactive,
+      pagination: paginationReactive,
+      loading: loadingRef,
+      rowKey(rowData) {
+        return rowData.column1;
+      },
+      handleSorterChange(sorter) {
+        if (!sorter || sorter.columnKey === 'column1') {
+          if (!loadingRef.value) {
+            loadingRef.value = true;
+            query(
+              paginationReactive.page,
+              paginationReactive.pageSize,
+              !sorter ? false : sorter.order,
+              column2Reactive.filterOptionValues
+            ).then((data) => {
+              column1Reactive.sortOrder = !sorter ? false : sorter.order;
+              dataRef.value = data.data;
+              paginationReactive.pageCount = data.pageCount;
+              paginationReactive.itemCount = data.total;
+              loadingRef.value = false;
+            });
+          }
+        }
+      },
+      handleFiltersChange(filters) {
+        if (!loadingRef.value) {
+          loadingRef.value = true;
+          const filterValues = filters.column2 || [];
+          query(
+            paginationReactive.page,
+            paginationReactive.pageSize,
+            column1Reactive.sortOrder,
+            filterValues
+          ).then((data) => {
+            column2Reactive.filterOptionValues = filterValues;
+            dataRef.value = data.data;
+            paginationReactive.pageCount = data.pageCount;
+            paginationReactive.itemCount = data.total;
+            loadingRef.value = false;
+          });
+        }
+      },
+      handlePageChange(currentPage) {
+        if (!loadingRef.value) {
+          loadingRef.value = true;
+          query(
+            currentPage,
+            paginationReactive.pageSize,
+            column1Reactive.sortOrder,
+            column2Reactive.filterOptionValues
+          ).then((data) => {
+            dataRef.value = data.data;
+            paginationReactive.page = currentPage;
+            paginationReactive.pageCount = data.pageCount;
+            paginationReactive.itemCount = data.total;
+            loadingRef.value = false;
+          });
+        }
+      },
+    };
   },
 });
-
-onMounted(() => {
-  query(paginationReactive.page, paginationReactive.pageSize).then((data) => {
-    dataRef.value = data.data;
-    paginationReactive.pageCount = data.pageCount;
-    paginationReactive.itemCount = data.total;
-    loadingRef.value = false;
-  });
-});
-
-const rowKey = (rowData) => {
-  return rowData.column1;
-};
-function handlePageChange(currentPage) {
-  if (!loadingRef.value) {
-    loadingRef.value = true;
-    paginationReactive.page = currentPage;
-    query(currentPage, paginationReactive.pageSize).then((data) => {
-      dataRef.value = data.data;
-      paginationReactive.pageCount = data.pageCount;
-      paginationReactive.itemCount = data.total;
-      loadingRef.value = false;
-    });
-  }
-}
 </script>

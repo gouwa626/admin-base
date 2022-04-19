@@ -18,8 +18,7 @@ import type { MenuOption } from 'naive-ui';
 const theme = useThemeStore();
 const route = useRoute();
 const activeKey = computed(() => {
-  let rouePath = route.path.replace('/', '');
-  let res = findRouteInfo(mockRouters.data, 'url', rouePath);
+  let res = findRouteInfo(mockRouters.data, 'url', route.path);
   return res.nodeId;
 });
 let menuOptions: MenuOption[] = [];
@@ -48,7 +47,7 @@ function setRouterTree(routers: any) {
               RouterLink,
               {
                 to: {
-                  name: item.url,
+                  path: item.url,
                 },
               },
               { default: () => item.nodeName }

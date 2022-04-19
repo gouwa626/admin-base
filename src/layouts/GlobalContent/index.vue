@@ -14,7 +14,9 @@
         mode="out-in"
         appear
       >
-        <component :is="Component" />
+        <div class="global-content-container">
+          <component :is="Component" />
+        </div>
       </transition>
     </router-view>
   </DarkModeContainer>
@@ -41,10 +43,21 @@ const isCollapse = computed(() => !theme.siderCollapse);
   transition-duration: 300ms;
   transition-timing-function: ease-in-out;
   background: #f6f9f8;
+  .global-content-container {
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    transition-property: all;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
+  }
 }
 .dark {
   .global-content {
     background: #101014;
+  }
+  .global-content-container {
+    background: #18181c;
   }
 }
 </style>

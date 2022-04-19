@@ -27,4 +27,9 @@ export const basicProps = {
     type: String,
     default: 'dialog',
   },
+  // 是否可拖动
+  drag: {
+    type: Boolean,
+    default: true,
+  },
 };

@@ -3,10 +3,10 @@ import type { DialogOptions } from 'naive-ui/lib/dialog';
  * @description: 弹窗对外暴露的方法
  */
 export interface ModalMethods {
-  setProps: (props) => void;
+  setProps: (props: any) => void;
   openModal: () => void;
   closeModal: () => void;
-  setSubLoading: (status) => void;
+  setSubLoading: (status: any) => void;
 }
 
 /**

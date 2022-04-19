@@ -11,14 +11,14 @@
       :single-line="false"
       @update-page="getData"
     />
+    <Add ref="addRef" :selectRow="selectRow" @submit="updateAdd"></Add>
   </n-space>
 </template>
 
 <script setup lang="ts">
-import { iconifyRender } from '@/utils';
 import { h, reactive, ref } from '@vue/runtime-core';
-import { DataTableColumns, NButton, NTag, PaginationProps } from 'naive-ui';
-
+import { DataTableColumns, NButton, NTag } from 'naive-ui';
+import Add from './components/Add.vue';
 // 表格模块
 interface tableRow {
   name: string;
@@ -39,15 +39,19 @@ const columnsFuc = ({
       key: 'id',
     },
     {
-      title: 'Name',
+      title: '姓名',
       key: 'name',
     },
     {
-      title: "Co('lum')n3",
+      title: '年龄',
+      key: 'age',
+    },
+    {
+      title: '地址',
       key: 'address',
     },
     {
-      title: 'tags',
+      title: '标签',
       key: 'tags',
       render(row) {
         const tags = row.tags.map((item) => {
@@ -79,7 +83,9 @@ const columnsFuc = ({
 };
 const columns = columnsFuc({ handleEdit });
 function handleEdit(row: tableRow) {
-  console.log(row);
+  // 一定要这样赋值
+  Object.assign(selectRow, row);
+  (addRef.value as any).showModal();
 }
 const data = ref<tableRow[]>([]);
 const loading = ref(false);
@@ -120,6 +126,16 @@ function getData(page: number) {
   }
 }
 getData(1);
+// 编辑处理
+const addRef = ref(null);
+let selectRow = reactive({});
+function updateAdd(updateRow: tableRow) {
+  data.value.forEach((item) => {
+    if (item.id == updateRow.id) {
+      Object.assign(item, updateRow);
+    }
+  });
+}
 </script>
 
 <style scoped lang="scss"></style>

@@ -1,7 +1,16 @@
 <template>
-  <n-modal id="basic-modal" v-bind="getBindValue" v-model:show="isModal" @close="onCloseModal">
+  <n-modal
+    id="basic-modal"
+    v-bind="getBindValue"
+    v-model:show="isModal"
+    @close="onCloseModal"
+    :style="`width:${getBindValue.width}px`"
+  >
     <template #header>
-      <div class="w-full cursor-move" id="basic-modal-bar">我是标题</div>
+      <div class="w-full" id="basic-modal-bar" :class="needDrag && 'cursor-move'">
+        <slot name="title" v-if="$slots.title"></slot>
+        <div class="wh-full" v-else>{{ getBindValue.title }}</div>
+      </div>
     </template>
     <template #default>
       <slot name="default"></slot>
@@ -34,32 +43,31 @@ import {
 import { basicProps } from './props';
 import startDrag from '@/utils/drag';
 import { deepMerge } from '@/utils';
-// import { FormProps } from '@/components/Form';
 import { ModalProps, ModalMethods } from './type';
 
 const attrs = useAttrs();
 const props = defineProps({ ...basicProps });
-const emit = defineEmits(['on-close', 'on-ok', 'register']);
+const emit = defineEmits(['on-close', 'on-sub', 'register']);
 
-const propsRef = ref(null);
+const propsRef = ref<Partial<ModalProps> | null>(null);
 
 const isModal = ref(false);
+//提交按钮loading
 const subLoading = ref(false);
-
+//合并props
 const getProps = computed(() => {
   return { ...props, ...(unref(propsRef) as any) };
 });
-
+// 确定按钮文案
 const subBtuText = computed(() => {
-  // const { subBtuText } = propsRef.value as any;
-  // return subBtuText || props.subBtuText;
-  return '确定';
+  const { subBtuText } = propsRef.value as any;
+  return subBtuText || props.subBtuText;
 });
-
+//设置最终props
 async function setProps(modalProps: Partial<ModalProps>): Promise<void> {
   propsRef.value = deepMerge(unref(propsRef) || ({} as any), modalProps);
 }
-
+// 设置属性
 const getBindValue = computed(() => {
   return {
     ...attrs,
@@ -67,19 +75,25 @@ const getBindValue = computed(() => {
     ...unref(propsRef),
   };
 });
-
+// 是否需要移动
+const needDrag = computed(() => {
+  const { drag } = getBindValue.value as any;
+  return drag;
+});
+//设置按钮loading
 function setSubLoading(status: boolean) {
   subLoading.value = status;
 }
 
 function openModal() {
   isModal.value = true;
-  nextTick(() => {
-    const oBox = document.getElementById('basic-modal');
-    const oBar = document.getElementById('basic-modal-bar');
-
-    startDrag(oBar, oBox);
-  });
+  if (needDrag.value) {
+    nextTick(() => {
+      const oBox = document.getElementById('basic-modal');
+      const oBar = document.getElementById('basic-modal-bar');
+      startDrag(oBar, oBox);
+    });
+  }
 }
 
 function closeModal() {
@@ -95,8 +109,7 @@ function onCloseModal() {
 
 function handleSubmit() {
   subLoading.value = true;
-  console.log(subLoading.value);
-  emit('on-ok');
+  emit('on-sub');
 }
 
 const modalMethods: ModalMethods = {

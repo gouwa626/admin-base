@@ -9,74 +9,73 @@
 </template>
 
 <script setup lang="ts">
-import { computed, h } from 'vue';
+import { computed, h, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { useThemeStore } from '@/store';
 import { iconifyRender } from '@/utils';
+import { mockRouters } from '@/mock/menuData';
 import type { MenuOption } from 'naive-ui';
 const theme = useThemeStore();
 const route = useRoute();
-const activeKey = computed(() => route.name as string);
-const menuOptions: MenuOption[] = [
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: 'home',
-          },
-        },
-        { default: () => '首页' }
-      ),
-    key: 'home',
-    icon: iconifyRender('mdi:home'),
-  },
-  {
-    label: '组件示例',
-    key: 'bear-paw',
-    icon: iconifyRender('mdi:access-point-network'),
-    children: [
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: 'table',
+const activeKey = computed(() => {
+  let rouePath = route.path.replace('/', '');
+  let res = findRouteInfo(mockRouters.data, 'url', rouePath);
+  return res.nodeId;
+});
+let menuOptions: MenuOption[] = [];
+interface routerType {
+  nodeId: string;
+  nodeName: string;
+  nodeCode: string;
+  url: string;
+  icon: string;
+  portalIcon: string;
+  location: string;
+  isRoot: number;
+  dspFlag: string;
+  remark: string;
+  buttonList?: string[];
+  children?: routerType[];
+  pnodeId: string;
+}
+function setRouterTree(routers: any) {
+  let arr: any = [];
+  routers.forEach((item: any) => {
+    let temp = {
+      label: () =>
+        item.children && item.children.length == 0
+          ? h(
+              RouterLink,
+              {
+                to: {
+                  name: item.url,
+                },
               },
-            },
-            { default: () => '表格展示' }
-          ),
-        key: 'table',
-      },
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: 'modal',
-              },
-            },
-            { default: () => '弹窗展示' }
-          ),
-        key: 'modal',
-      },
-    ],
-  },
-  {
-    label: '两个都要',
-    key: 'both',
-    icon: iconifyRender('mdi:television-ambient-light'),
-    children: [
-      {
-        label: '鱼和熊掌不可兼得',
-        key: 'can-not',
-      },
-    ],
-  },
-];
+              { default: () => item.nodeName }
+            )
+          : item.nodeName,
+      key: item.nodeId,
+      icon: item.icon ? iconifyRender(item.icon) : () => '',
+    };
+    if (item.children && item.children.length) {
+      temp.children = setRouterTree(item.children);
+    }
+    arr.push(temp);
+  });
+  return arr;
+}
+
+function findRouteInfo(arr, key, findKey): any {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][key] == findKey) {
+      return arr[i];
+    }
+    if (arr[i].children && arr[i].children.length) {
+      return findRouteInfo(arr[i].children, key, findKey);
+    }
+  }
+}
+menuOptions = setRouterTree(mockRouters.data);
 </script>
 
 <style scoped lang="scss"></style>

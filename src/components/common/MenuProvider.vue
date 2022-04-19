@@ -19,40 +19,21 @@ const route = useRoute();
 const activeKey = computed(() => route.name as string);
 const menuOptions: MenuOption[] = [
   {
-    label: '鱼',
-    key: 'fish',
-    icon: iconifyRender('mdi:abacus'),
-    children: [
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: 'home',
-              },
-            },
-            { default: () => '回家' }
-          ),
-        key: 'home',
-      },
-      {
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: 'about',
-              },
-            },
-            { default: () => '关于' }
-          ),
-        key: 'about',
-      },
-    ],
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'home',
+          },
+        },
+        { default: () => '首页' }
+      ),
+    key: 'home',
+    icon: iconifyRender('mdi:home'),
   },
   {
-    label: '熊掌',
+    label: '组件示例',
     key: 'bear-paw',
     icon: iconifyRender('mdi:access-point-network'),
     children: [
@@ -62,12 +43,25 @@ const menuOptions: MenuOption[] = [
             RouterLink,
             {
               to: {
-                name: 'test',
+                name: 'table',
               },
             },
-            { default: () => '测试' }
+            { default: () => '表格展示' }
           ),
-        key: 'test',
+        key: 'table',
+      },
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: 'modal',
+              },
+            },
+            { default: () => '弹窗展示' }
+          ),
+        key: 'modal',
       },
     ],
   },

@@ -38,7 +38,7 @@ const isCollapse = computed(() => !theme.siderCollapse);
   width: 100%;
   padding-top: 76px;
   padding-right: 20px;
-  padding-bottom: 0px;
+  padding-bottom: 20px;
   transition-property: all;
   transition-duration: 300ms;
   transition-timing-function: ease-in-out;

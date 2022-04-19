@@ -28,6 +28,7 @@ const { title } = userConf();
 }
 .logo {
   font-size: 32px;
+  margin-right: 5px;
 }
 .title {
   font-size: 16px;

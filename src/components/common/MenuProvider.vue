@@ -28,7 +28,7 @@ interface routerType {
   nodeCode: string;
   url: string;
   icon: string;
-  portalIcon: string;
+  portalIcon: string | null;
   location: string;
   isRoot: number;
   dspFlag: string;
@@ -37,10 +37,10 @@ interface routerType {
   children?: routerType[];
   pnodeId: string;
 }
-function setRouterTree(routers: any) {
-  let arr: any = [];
-  routers.forEach((item: any) => {
-    let temp = {
+function setRouterTree(routers: routerType[]): MenuOption[] {
+  let arr: MenuOption[] = [];
+  routers.forEach((item: routerType) => {
+    let temp: MenuOption = {
       label: () =>
         item.children && item.children.length == 0
           ? h(
@@ -54,23 +54,25 @@ function setRouterTree(routers: any) {
             )
           : item.nodeName,
       key: item.nodeId,
+      children: [],
       icon: item.icon ? iconifyRender(item.icon) : () => '',
     };
     if (item.children && item.children.length) {
       temp.children = setRouterTree(item.children);
     }
+    if (temp.children?.length == 0) delete temp.children;
     arr.push(temp);
   });
   return arr;
 }
 
-function findRouteInfo(arr, key, findKey): any {
+function findRouteInfo(arr: routerType[], key: string, findKey: string | number): any {
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i][key] == findKey) {
+    if (arr[i][key as keyof routerType] == findKey) {
       return arr[i];
     }
-    if (arr[i].children && arr[i].children.length) {
-      return findRouteInfo(arr[i].children, key, findKey);
+    if (arr[i].children && arr[i].children?.length) {
+      return findRouteInfo(arr[i].children as routerType[], key, findKey);
     }
   }
 }

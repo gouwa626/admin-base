@@ -1,4 +1,22 @@
-export const mockRouters = {
+interface dataType {
+  data: routerType[];
+}
+interface routerType {
+  nodeId: string;
+  nodeName: string;
+  nodeCode: string;
+  url: string;
+  icon: string;
+  portalIcon: string | null;
+  location: string;
+  isRoot: number;
+  dspFlag: string;
+  remark: string;
+  buttonList?: string[];
+  children?: routerType[];
+  pnodeId: string;
+}
+export const mockRouters: dataType = {
   data: [
     {
       nodeId: 'bb2c07aaa58b4c20abf56c2ffcb9c83a',

@@ -15,6 +15,7 @@ import { useThemeStore } from '@/store';
 import { iconifyRender } from '@/utils';
 import { mockRouters } from '@/mock/menuData';
 import type { MenuOption } from 'naive-ui';
+import type { routerType } from '@/mock';
 const theme = useThemeStore();
 const route = useRoute();
 const activeKey = computed(() => {
@@ -22,21 +23,21 @@ const activeKey = computed(() => {
   return res.nodeId;
 });
 let menuOptions: MenuOption[] = [];
-interface routerType {
-  nodeId: string;
-  nodeName: string;
-  nodeCode: string;
-  url: string;
-  icon: string;
-  portalIcon: string | null;
-  location: string;
-  isRoot: number;
-  dspFlag: string;
-  remark: string;
-  buttonList?: string[];
-  children?: routerType[];
-  pnodeId: string;
-}
+// interface routerType {
+//   nodeId: string;
+//   nodeName: string;
+//   nodeCode: string;
+//   url: string | null;
+//   icon: string;
+//   portalIcon: string | null;
+//   location: string;
+//   isRoot: number;
+//   dspFlag: string;
+//   remark: string;
+//   buttonList?: string[];
+//   children?: routerType[];
+//   pnodeId: string;
+// }
 function setRouterTree(routers: routerType[]): MenuOption[] {
   let arr: MenuOption[] = [];
   routers.forEach((item: routerType) => {

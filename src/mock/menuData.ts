@@ -1,12 +1,12 @@
-interface dataType {
+export interface dataType {
   data: routerType[];
 }
-interface routerType {
+export interface routerType {
   nodeId: string;
   nodeName: string;
   nodeCode: string;
   url: string;
-  icon: string;
+  icon: string | null;
   portalIcon: string | null;
   location: string;
   isRoot: number;

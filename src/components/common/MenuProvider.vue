@@ -9,38 +9,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, h, ref } from 'vue';
+import { computed, h } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
-import { useThemeStore } from '@/store';
+import { useRouteStore, useThemeStore } from '@/store';
 import { iconifyRender } from '@/utils';
-import { mockRouters } from '@/mock/menuData';
 import type { MenuOption } from 'naive-ui';
-import type { routerType } from '@/mock';
 const theme = useThemeStore();
+const routeStore = useRouteStore();
 const route = useRoute();
 const activeKey = computed(() => {
-  let res = findRouteInfo(mockRouters.data, 'url', route.path);
+  let res = findRouteInfo(routeStore.routerInfos, 'url', route.path);
   return res.nodeId;
 });
 let menuOptions: MenuOption[] = [];
-// interface routerType {
-//   nodeId: string;
-//   nodeName: string;
-//   nodeCode: string;
-//   url: string | null;
-//   icon: string;
-//   portalIcon: string | null;
-//   location: string;
-//   isRoot: number;
-//   dspFlag: string;
-//   remark: string;
-//   buttonList?: string[];
-//   children?: routerType[];
-//   pnodeId: string;
-// }
-function setRouterTree(routers: routerType[]): MenuOption[] {
+// 转换成菜单组件数据
+function setRouterTree(routers: Route.RouterInfo[]): MenuOption[] {
   let arr: MenuOption[] = [];
-  routers.forEach((item: routerType) => {
+  routers.forEach((item: Route.RouterInfo) => {
     let temp: MenuOption = {
       label: () =>
         item.children && item.children.length == 0
@@ -66,18 +51,18 @@ function setRouterTree(routers: routerType[]): MenuOption[] {
   });
   return arr;
 }
-
-function findRouteInfo(arr: routerType[], key: string, findKey: string | number): any {
+// 查找当前路由
+function findRouteInfo(arr: Route.RouterInfo[], key: string, findKey: string | number): any {
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i][key as keyof routerType] == findKey) {
+    if (arr[i][key as keyof Route.RouterInfo] == findKey) {
       return arr[i];
     }
     if (arr[i].children && arr[i].children?.length) {
-      return findRouteInfo(arr[i].children as routerType[], key, findKey);
+      return findRouteInfo(arr[i].children as Route.RouterInfo[], key, findKey);
     }
   }
 }
-menuOptions = setRouterTree(mockRouters.data);
+menuOptions = setRouterTree(routeStore.routerInfos);
 </script>
 
 <style scoped lang="scss"></style>

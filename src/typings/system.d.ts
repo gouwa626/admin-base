@@ -52,3 +52,29 @@ declare namespace Conf {
     icon: string;
   }
 }
+// 路由模块
+declare namespace Route {
+  interface RouterInfos {
+    routerInfos: RouterInfo[];
+  }
+  interface RouterInfo {
+    nodeId: string;
+    nodeName: string;
+    nodeCode: string;
+    url: string;
+    icon: string | null;
+    portalIcon: string | null;
+    location: string;
+    isRoot: number;
+    dspFlag: string;
+    remark: string;
+    buttonList?: string[];
+    children?: RouterInfo[];
+    pnodeId: string;
+  }
+}
+// 面包屑
+type GlobalBreadcrumb = import('naive-ui').DropdownOption &
+  Route.RouterInfo & {
+    children?: GlobalBreadcrumb[];
+  };

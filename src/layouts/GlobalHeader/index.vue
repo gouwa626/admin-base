@@ -13,6 +13,7 @@
       <menu-collapse v-else></menu-collapse>
       <div class="header-left">
         <menu-provider v-if="!isVertical"></menu-provider>
+        <GlobalBreadcrumb v-else></GlobalBreadcrumb>
       </div>
       <div class="header-right">
         <layout-mode></layout-mode>
@@ -26,7 +27,7 @@
 <script setup lang="ts">
 import { useThemeStore } from '@/store';
 import { computed } from 'vue';
-import { LayoutMode, ThemeMode, MenuCollapse, UserAvatar } from './components';
+import { LayoutMode, ThemeMode, MenuCollapse, UserAvatar, GlobalBreadcrumb } from './components';
 import GlobalLogo from '@/layouts/GlobalLogo/index.vue';
 import MenuProvider from '@/components/common/MenuProvider.vue';
 const theme = useThemeStore();

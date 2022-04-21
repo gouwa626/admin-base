@@ -4,9 +4,6 @@ module.exports = {
     node: true,
     'vue/setup-compiler-macros': true,
   },
-  globals: {
-    Recordable: 'readonly',
-  },
   extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
@@ -31,5 +28,7 @@ module.exports = {
     'max-len': ['error', { code: 100 }],
     '@typescript-eslint/no-explicit-any': ['off'],
     '@typescript-eslint/no-non-null-assertion': 'off',
+    // 关闭未声明，ts控制
+    'no-undef': 'off',
   },
 };

@@ -22,6 +22,8 @@ declare module '@vue/runtime-core' {
     MenuProvider: typeof import('./src/components/common/MenuProvider.vue')['default']
     NAffix: typeof import('naive-ui')['NAffix']
     NaiveProvider: typeof import('./src/components/common/NaiveProvider.vue')['default']
+    NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']
+    NBreadcrumbItem: typeof import('naive-ui')['NBreadcrumbItem']
     NButton: typeof import('naive-ui')['NButton']
     NDataTable: typeof import('naive-ui')['NDataTable']
     NDialogProvider: typeof import('naive-ui')['NDialogProvider']

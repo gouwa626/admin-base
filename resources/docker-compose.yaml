@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  admin_base:
+    image: image_admin_base
+    container_name: admin_base
+    restart: always
+    ports:
+      - 8888:80
+    environment:
+      - TZ=Asia/Shangha
+    volumes:
+      - ./conf:/etc/nginx/conf.d
+      - ./conf/config.json:/opt/www/config.json

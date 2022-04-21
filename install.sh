@@ -1,13 +1,12 @@
-#!/bin/bash
+
 # 清除Dockerfile
 if [ -d "./dist" ]; then
-    rm -rf ./dist
+  rm -rf ./dist
 fi
 
 if [ -f "./Dockerfile" ]; then
-    rm -f ./Dockerfile
+  rm -f ./Dockerfile
 fi
-
 npm run build
 cp ./dist/config.json ./resources/conf
 
@@ -19,5 +18,5 @@ echo "EXPOSE 80" >> ./Dockerfile
 docker build -t image_admin_base:latest .
 cd ./resources
 docker-compose up -d
-
-docker images | grep none | awk '{print $3}' | xargs docker rmi
+// 清除所有未使用的镜像&容器
+echo y docker system prune

@@ -18,5 +18,5 @@ echo "EXPOSE 80" >> ./Dockerfile
 docker build -t image_admin_base:latest .
 cd ./resources
 docker-compose up -d
-// 清除所有未使用的镜像&容器
+# 清除所有未使用的镜像&容器
 echo y docker system prune

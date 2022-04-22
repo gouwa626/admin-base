@@ -19,7 +19,7 @@ const routeStore = useRouteStore();
 const route = useRoute();
 const activeKey = computed(() => {
   let res = findRouteInfo(routeStore.routerInfos, 'url', route.path);
-  return res.nodeId;
+  return res ? res.nodeId : '';
 });
 let menuOptions: MenuOption[] = [];
 // 转换成菜单组件数据

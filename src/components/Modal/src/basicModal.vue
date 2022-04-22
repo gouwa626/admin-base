@@ -13,7 +13,9 @@
       </div>
     </template>
     <template #default>
-      <slot name="default"></slot>
+      <div class="basic-modal-warper">
+        <slot name="default"></slot>
+      </div>
     </template>
     <template #action v-if="!$slots.action">
       <n-space>
@@ -39,16 +41,18 @@ import {
   useAttrs,
   defineEmits,
   defineProps,
+  watch,
 } from 'vue';
 import { basicProps } from './props';
 import startDrag from '@/utils/drag';
 import { deepMerge } from '@/utils';
 import { ModalProps, ModalMethods } from './type';
+import { useBodyScroll } from '@/hooks';
 
 const attrs = useAttrs();
 const props = defineProps({ ...basicProps });
 const emit = defineEmits(['on-close', 'on-sub', 'register']);
-
+const { scrollBodyHandler } = useBodyScroll();
 const propsRef = ref<Partial<ModalProps> | null>(null);
 
 const isModal = ref(false);
@@ -75,6 +79,12 @@ const getBindValue = computed(() => {
     ...unref(propsRef),
   };
 });
+watch(
+  () => getBindValue,
+  (newValue) => {
+    console.log(newValue);
+  }
+);
 // 是否需要移动
 const needDrag = computed(() => {
   const { drag } = getBindValue.value as any;
@@ -123,10 +133,15 @@ const instance = getCurrentInstance();
 if (instance) {
   emit('register', modalMethods);
 }
+watch(
+  () => isModal.value,
+  (newValue) => scrollBodyHandler(newValue)
+);
 </script>
 
 <style lang="scss">
-.cursor-move {
-  cursor: move;
+.basic-modal-warper {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 </style>

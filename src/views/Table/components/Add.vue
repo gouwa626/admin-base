@@ -5,9 +5,16 @@
         <n-form-item label="姓名" path="name">
           <n-input v-model:value="formModel.name" placeholder="Input" />
         </n-form-item>
-        <n-form-item label="Select" path="address">
+        <n-form-item label="年龄" path="age">
+          <n-input v-model:value="formModel.age" placeholder="Input" />
+        </n-form-item>
+        <n-form-item label="地址" path="address">
+          <n-input v-model:value="formModel.address" placeholder="Input" />
+        </n-form-item>
+        <n-form-item label="标签" path="tags">
           <n-select
-            v-model:value="formModel.address"
+            multiple
+            v-model:value="formModel.tags"
             placeholder="Select"
             :options="generalOptions"
           />
@@ -20,41 +27,32 @@
 <script setup lang="ts">
 import { useModal } from '@/components/Modal';
 import basicModal from '@/components/Modal/src/basicModal.vue';
-import { deepMerge } from '@/utils';
-import { reactive } from 'vue';
+import { ref } from 'vue';
+import type { tableRow } from '../index.vue';
 interface Props {
   selectRow: tableRow;
-}
-interface tableRow {
-  id?: string;
-  age?: number;
 }
 const props = defineProps<Props>();
 const emit = defineEmits(['submit', 'register']);
 const [addmodelRegister, { openModal, closeModal: close }] = useModal({
-  title: '标题',
+  title: props.selectRow.id ? '编辑' : '新建',
   closable: true,
   width: 600,
 });
 function showModal() {
-  if (props.selectRow.id) {
-    //深拷贝处理
-    formModel = deepMerge(formModel, props.selectRow);
-    console.log({ ...formModel });
-  }
+  formModel.value = props.selectRow;
   openModal();
 }
 function closeModal() {
   close();
 }
 function handleClickSubmit() {
-  console.log({ ...formModel });
-  emit('submit', formModel);
+  emit('submit', formModel.value);
   close();
 }
 defineExpose({ showModal });
 
-let formModel = reactive<Recordable>({});
+let formModel = ref<Recordable>({});
 const generalOptions = ['groode', 'veli good', 'emazing', 'lidiculous'].map((v) => ({
   label: v,
   value: v,
@@ -66,5 +64,6 @@ const generalOptions = ['groode', 'veli good', 'emazing', 'lidiculous'].map((v) 
   padding: 20px;
   width: 500px;
   margin: 0 auto;
+  // height: 800px;
 }
 </style>

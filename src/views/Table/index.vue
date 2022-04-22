@@ -1,4 +1,7 @@
 <template>
+  <n-space>
+    <n-button @click="handleClickAdd">新建</n-button>
+  </n-space>
   <n-space vertical :size="12">
     <n-data-table
       remote
@@ -16,14 +19,15 @@
 </template>
 
 <script setup lang="ts">
-import { h, reactive, ref } from '@vue/runtime-core';
+import { h, reactive, ref, toRaw, toRef, toRefs, unref } from '@vue/runtime-core';
+import { cloneDeep } from 'lodash';
 import { DataTableColumns, NButton, NTag } from 'naive-ui';
 import Add from './components/Add.vue';
 // 表格模块
-interface tableRow {
+export interface tableRow {
   name: string;
   id: string;
-  age: number;
+  age: string;
   address: string;
   tags: string[];
 }
@@ -84,7 +88,7 @@ const columnsFuc = ({
 const columns = columnsFuc({ handleEdit });
 function handleEdit(row: tableRow) {
   // 一定要这样赋值
-  Object.assign(selectRow, row);
+  selectRow = Object.assign(selectRow, row);
   (addRef.value as any).showModal();
 }
 const data = ref<tableRow[]>([]);
@@ -101,7 +105,7 @@ function setData(page: number) {
       temp.push({
         id: `page${page}-${i}`,
         name: 'John Brown',
-        age: 32 + i,
+        age: `${32 + i}`,
         address: 'New York No. 1 Lake Park',
         tags: ['nice', 'developer'],
       });
@@ -111,7 +115,7 @@ function setData(page: number) {
         data: temp,
         total: 99,
       });
-    }, 500);
+    }, 200);
   });
 }
 function getData(page: number) {
@@ -135,6 +139,20 @@ function updateAdd(updateRow: tableRow) {
       Object.assign(item, updateRow);
     }
   });
+}
+//新建
+function handleClickAdd() {
+  selectRow = Object.assign(
+    selectRow,
+    cloneDeep({
+      name: '',
+      id: '',
+      age: '',
+      address: '',
+      tags: [],
+    })
+  );
+  (addRef.value as any).showModal();
 }
 </script>
 

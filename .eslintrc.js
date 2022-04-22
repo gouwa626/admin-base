@@ -22,7 +22,7 @@ module.exports = {
       // 组件名称驼峰，忽略index
       'error',
       {
-        ignores: ['index'],
+        ignores: ['index', '404'],
       },
     ],
     'max-len': ['error', { code: 100 }],

@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { DropdownOption } from 'naive-ui';
 import { cloneDeep } from 'lodash';
@@ -48,21 +48,15 @@ function setBreadcrumbs(arr: any, path: string): GlobalBreadcrumb[] {
       return res;
     }
     if (arr[i].children && arr[i].children?.length) {
-      res.push(arr[i], ...setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path));
-      return res;
+      let childRes = setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path);
+      if (childRes && childRes.length) {
+        res.push(arr[i], ...setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path));
+        return res;
+      }
     }
   }
   return res;
 }
-watch(
-  () => breadcrumbs,
-  (newValue) => {
-    console.log(newValue);
-  },
-  {
-    immediate: true,
-  }
-);
 function dropdownSelect(key: string, option: DropdownOption) {
   router.push({ path: option.url as string });
 }

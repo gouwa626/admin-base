@@ -8,14 +8,15 @@
           key-field="nodeId"
           label-field="nodeName"
           @select="dropdownSelect"
+          :render-icon="renderIcon"
         >
           <span>
-            <component :is="breadcrumb.icon" />
+            <Icon v-if="breadcrumb.icon" :icon="breadcrumb.icon" class="breadcrumb-icon" />
             <span>{{ breadcrumb.nodeName }}</span>
           </span>
         </n-dropdown>
         <template v-else>
-          <component :is="breadcrumb.icon" />
+          <Icon v-if="breadcrumb.icon" :icon="breadcrumb.icon" class="breadcrumb-icon" />
           <span>{{ breadcrumb.nodeName }}</span>
         </template>
       </n-breadcrumb-item>
@@ -29,9 +30,16 @@ import { useRoute, useRouter } from 'vue-router';
 import type { DropdownOption } from 'naive-ui';
 import { cloneDeep } from 'lodash';
 import { useRouteStore } from '@/store';
+import { Icon } from '@iconify/vue';
+import { iconifyRender } from '@/utils';
+
 const route = useRoute();
 const router = useRouter();
 const routeStore = useRouteStore();
+// 处理下拉菜单的icon
+function renderIcon(option: DropdownOption) {
+  return iconifyRender((option.icon || '') as string)();
+}
 const breadcrumbs = computed(() => setBreadcrumbs(cloneDeep(routeStore.routerInfos), route.path));
 // 根据路由生成面包屑数据
 function setBreadcrumbs(arr: any, path: string): GlobalBreadcrumb[] {
@@ -61,4 +69,11 @@ function dropdownSelect(key: string, option: DropdownOption) {
   router.push({ path: option.url as string });
 }
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+.breadcrumb-icon {
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: text-bottom;
+  margin-right: 4px;
+}
+</style>

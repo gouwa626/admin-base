@@ -79,12 +79,6 @@ const getBindValue = computed(() => {
     ...unref(propsRef),
   };
 });
-watch(
-  () => getBindValue,
-  (newValue) => {
-    console.log(newValue);
-  }
-);
 // 是否需要移动
 const needDrag = computed(() => {
   const { drag } = getBindValue.value as any;

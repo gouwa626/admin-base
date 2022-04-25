@@ -1,21 +1,21 @@
 <template>
-  <basic-modal @register="addmodelRegister" @on-sub="handleClickSubmit">
+  <basic-modal @register="addmodelRegister" @on-sub="handleClickSubmit" :title="modelTitle">
     <div class="form-warper">
       <n-form :model="formModel" label-placement="left" label-width="80px">
         <n-form-item label="姓名" path="name">
-          <n-input v-model:value="formModel.name" placeholder="Input" />
+          <n-input v-model:value="formModel.name" placeholder="请输入姓名" />
         </n-form-item>
         <n-form-item label="年龄" path="age">
-          <n-input v-model:value="formModel.age" placeholder="Input" />
+          <n-input v-model:value="formModel.age" placeholder="请输入年龄" />
         </n-form-item>
         <n-form-item label="地址" path="address">
-          <n-input v-model:value="formModel.address" placeholder="Input" />
+          <n-input v-model:value="formModel.address" placeholder="请输入地址" />
         </n-form-item>
         <n-form-item label="标签" path="tags">
           <n-select
             multiple
             v-model:value="formModel.tags"
-            placeholder="Select"
+            placeholder="请选择标签"
             :options="generalOptions"
           />
         </n-form-item>
@@ -34,13 +34,15 @@ interface Props {
 }
 const props = defineProps<Props>();
 const emit = defineEmits(['submit', 'register']);
-const [addmodelRegister, { openModal, closeModal: close }] = useModal({
-  title: props.selectRow.id ? '编辑' : '新建',
+let modelTitle = ref('新建');
+let [addmodelRegister, { openModal, closeModal: close }] = useModal({
   closable: true,
   width: 600,
 });
 function showModal() {
   formModel.value = props.selectRow;
+  modelTitle.value = props.selectRow.id ? '编辑' : '新建';
+
   openModal();
 }
 function closeModal() {

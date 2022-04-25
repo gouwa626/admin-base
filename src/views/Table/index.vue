@@ -2,6 +2,7 @@
   <n-space>
     <n-button @click="handleClickAdd">新建</n-button>
   </n-space>
+  <n-divider />
   <n-space vertical :size="12">
     <n-data-table
       remote
@@ -19,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { h, reactive, ref, toRaw, toRef, toRefs, unref } from '@vue/runtime-core';
+import { h, reactive, ref } from '@vue/runtime-core';
 import { cloneDeep } from 'lodash';
 import { DataTableColumns, NButton, NTag } from 'naive-ui';
 import Add from './components/Add.vue';
@@ -61,7 +62,9 @@ const columnsFuc = ({
         const tags = row.tags.map((item) => {
           return h(
             NTag,
-            {},
+            {
+              style: 'margin-right:5px;',
+            },
             {
               default: () => item,
             }
@@ -132,7 +135,7 @@ function getData(page: number) {
 getData(1);
 // 编辑处理
 const addRef = ref(null);
-let selectRow = reactive({});
+let selectRow = reactive({ name: '', id: '', age: '', address: '', tags: [] });
 function updateAdd(updateRow: tableRow) {
   data.value.forEach((item) => {
     if (item.id == updateRow.id) {

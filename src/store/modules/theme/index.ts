@@ -40,6 +40,7 @@ export const useThemeStore = defineStore('theme-store', {
     //设置主题
     setDarkMode(darkMode: boolean) {
       this.darkMode = darkMode;
+      localStorage.setItem('darkMode', darkMode ? 'dark' : '');
     },
     // 切换黑色主题
     toggleDarkMode() {
@@ -52,6 +53,7 @@ export const useThemeStore = defineStore('theme-store', {
         this.siderCollapse = false;
       }
       this.layout.mode = mode;
+      localStorage.setItem('layoutMode', this.layout.mode);
     },
     //设置侧边栏折叠状态
     setSiderCollapse(collapse: boolean) {

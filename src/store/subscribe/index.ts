@@ -27,7 +27,8 @@ export function subscribeThemeStore() {
   const stopOsTheme = watch(
     osTheme,
     (newValue) => {
-      const isDark = newValue == 'dark';
+      const localIsDark = localStorage.getItem('darkMode');
+      const isDark = newValue == 'dark' || localIsDark == 'dark';
       theme.setDarkMode(isDark);
     },
     {
@@ -42,6 +43,9 @@ export function subscribeThemeStore() {
       document.documentElement.style.overflowX = 'hidden';
     }
   });
+  // 设置布局模式
+  const localLayoutMode = localStorage.getItem('layoutMode') || 'vertical';
+  theme.setLayoutMode(localLayoutMode as EnumType.ThemeLayoutMode);
   onUnmounted(() => {
     stopDarkMode();
     stopOsTheme();

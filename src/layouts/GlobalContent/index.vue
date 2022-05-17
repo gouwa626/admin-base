@@ -8,14 +8,14 @@
     ]"
     tag="main"
   >
-    <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component, route }">
       <transition
         :name="theme.page.animate ? theme.page.animateMode : undefined"
         mode="out-in"
         appear
       >
-        <div class="global-content-container">
-          <component :is="Component" />
+        <div class="global-content-container" v-if="routerFlag">
+          <component :is="Component" :key="route.path" />
         </div>
       </transition>
     </router-view>
@@ -24,11 +24,28 @@
 
 <script setup lang="ts">
 import { useThemeStore } from '@/store';
-import { computed } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const theme = useThemeStore();
 const isVertical = computed(() => theme.layout.mode == 'vertical');
 const isCollapse = computed(() => !theme.siderCollapse);
+// 通过变量&监听路由变化，显隐一次，保证动画执行
+const routerFlag = ref(false);
+const route = useRoute();
+watch(
+  () => route,
+  () => {
+    routerFlag.value = false;
+    nextTick(() => {
+      routerFlag.value = true;
+    });
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 </script>
 
 <style scoped lang="scss">

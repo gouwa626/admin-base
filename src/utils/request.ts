@@ -1,15 +1,17 @@
 import Axios from 'axios';
 
-const request = Axios.create({});
+const request = Axios.create({
+  headers: {
+    'Content-Type': 'application/json;charset=UTF-8',
+    AppKey: 'S-01001',
+  },
+});
 request.interceptors.request.use((config) => {
   return config;
 });
 request.interceptors.response.use(
   (response) => {
-    console.log(response);
-    for (let index = 0; index < 10; index++) {
-      window.$message.error('系统错误');
-    }
+    return Promise.resolve(response.data);
   },
   (error) => {
     window.$message.error('系统错误');

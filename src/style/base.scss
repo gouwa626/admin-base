@@ -1,3 +1,6 @@
 body,html,#app,.n-config-provider{
   height: 100%;
 }
+.n-button+.n-button{
+  margin-left: 8px;
+}

@@ -1,6 +1,6 @@
 <template>
   <router-link to="/" class="logo-warper flex-center w-full nowrap-hidden">
-    <icon-ph:airplane-tilt-fill class="logo" />
+    <icon-custom-gateway class="logo" />
     <h2 v-show="showTitle" class="title">
       {{ title }}
     </h2>
@@ -18,6 +18,7 @@ interface Props {
 defineProps<Props>();
 
 const { title } = userConf();
+document.title = title;
 </script>
 <style scoped lang="scss">
 .logo-warper {
@@ -27,7 +28,7 @@ const { title } = userConf();
   transition-timing-function: ease-in-out;
 }
 .logo {
-  font-size: 32px;
+  font-size: 12px;
   margin-right: 5px;
 }
 .title {

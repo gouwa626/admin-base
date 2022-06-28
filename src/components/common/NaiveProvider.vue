@@ -5,6 +5,7 @@
         <n-global-style />
         <slot></slot>
         <naive-provider-content />
+        <basicModal ref="modalRef"> </basicModal>
       </n-dialog-provider>
     </n-message-provider>
   </n-loading-bar-provider>

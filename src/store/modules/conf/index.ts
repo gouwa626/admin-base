@@ -3,7 +3,7 @@ type ConfState = Conf.Setting;
 export const userConf = defineStore('conf-store', {
   state: (): ConfState => {
     return {
-      title: '通用管理系统',
+      title: '网关管理系统',
       icon: 'mdi:book',
     };
   },

@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, h, reactive } from 'vue';
+import { ref, h, reactive, nextTick } from 'vue';
 import { FormInst, DataTableColumns, NButton, PaginationInfo } from 'naive-ui';
 import { channelDelete, channelList } from '@/api/channel';
 import Dialog from './components/Dialog.vue';
@@ -61,7 +61,7 @@ function handleValidateClick() {
   getList();
 }
 // 表格相关
-const rowKey = (rowData: ChannelRow) => rowData.ID;
+const rowKey = (rowData: ChannelRow) => rowData.ID as string;
 const columnsFuc = ({
   handleEdit,
   handleDel,
@@ -155,7 +155,9 @@ function getData(page: number) {
 }
 function handleEdit(row: ChannelRow) {
   selectId.value = row.ID as string;
-  dialogRef.value.showModal();
+  nextTick(() => {
+    dialogRef.value.showModal();
+  });
 }
 function handleDel(row: ChannelRow) {
   console.log(row.ID);

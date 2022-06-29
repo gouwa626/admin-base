@@ -16,7 +16,6 @@ declare module '@vue/runtime-core' {
     IconLineMdMenuFoldLeft: typeof import('~icons/line-md/menu-fold-left')['default']
     IconLineMdMenuUnfoldLeft: typeof import('~icons/line-md/menu-unfold-left')['default']
     'IconMdi:accountChildCircle': typeof import('~icons/mdi/account-child-circle')['default']
-    'IconMdi:qqchat': typeof import('~icons/mdi/qqchat')['default']
     IconMdiDragHorizontal: typeof import('~icons/mdi/drag-horizontal')['default']
     IconMdiDragVertical: typeof import('~icons/mdi/drag-vertical')['default']
     MenuProvider: typeof import('./src/components/common/MenuProvider.vue')['default']

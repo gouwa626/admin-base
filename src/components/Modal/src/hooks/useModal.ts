@@ -33,7 +33,6 @@ export function useModal(props: any): UseModalReturnType {
       }
     );
   };
-
   const methods: ModalMethods = {
     setProps: (props): void => {
       getInstance()?.setProps(props);
@@ -48,6 +47,5 @@ export function useModal(props: any): UseModalReturnType {
       getInstance()?.setSubLoading(status);
     },
   };
-
   return [register, methods];
 }

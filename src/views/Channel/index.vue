@@ -1,6 +1,12 @@
 <template>
   <n-space>
-    <n-form ref="formRef" label-placement="left" inline :label-width="80" :model="formValue">
+    <n-form
+      ref="formRef"
+      label-placement="left"
+      inline
+      :label-width="80"
+      :model="formValue"
+    >
       <n-form-item label="姓名" path="user.name">
         <n-input v-model:value="formValue.user.name" placeholder="输入姓名" />
       </n-form-item>
@@ -11,7 +17,9 @@
         <n-input v-model:value="formValue.phone" placeholder="电话号码" />
       </n-form-item>
       <n-form-item>
-        <n-button attr-type="button" @click="handleValidateClick"> 查询 </n-button>
+        <n-button attr-type="button" @click="handleValidateClick">
+          查询
+        </n-button>
       </n-form-item>
     </n-form>
   </n-space>
@@ -34,24 +42,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, h, reactive } from 'vue';
+import { ref, h, reactive, nextTick } from 'vue';
 import { FormInst, DataTableColumns, NButton, PaginationInfo } from 'naive-ui';
-import { channelList } from '@/api/channel';
+import { channelDelete, channelList } from '@/api/channel';
 import Dialog from './components/Dialog.vue';
 import dayjs from 'dayjs';
-import { useModal } from '@/components/Modal';
-export interface ChannelRow {
-  ID: string;
-  AppKey: string;
-  AppName: string;
-  AppMemo: string;
-  AppSecret: string;
-  AppType: number;
-  AppStatus: number;
-  VerifyType: number;
-  CreateTime: string;
-  ModifyTime: string;
-}
+import { ChannelRow } from '@/typings/channel';
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
   user: {
@@ -60,24 +56,18 @@ const formValue = ref({
   },
   phone: '',
 });
-function handleValidateClick(e: MouseEvent) {
-  e.preventDefault();
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      window.$message.success('Valid');
-    } else {
-      console.log(errors);
-      window.$message.error('Invalid');
-    }
-  });
+function handleValidateClick() {
+  pagination.page = 1;
+  getList();
 }
 // 表格相关
-const rowKey = (rowData: ChannelRow) => rowData.ID;
+const rowKey = (rowData: ChannelRow) => rowData.ID as string;
 const columnsFuc = ({
   handleEdit,
   handleDel,
 }: {
   handleEdit: (row: ChannelRow) => void;
+  handleDel: (row: ChannelRow) => void;
 }): DataTableColumns<ChannelRow> => {
   return [
     // {
@@ -100,7 +90,11 @@ const columnsFuc = ({
       title: '修改时间',
       key: 'ModifyTime',
       render(row) {
-        return h('span', {}, dayjs(row.ModifyTime).format('YYYY-MM-DD HH:mm:ss'));
+        return h(
+          'span',
+          {},
+          dayjs(row.ModifyTime).format('YYYY-MM-DD HH:mm:ss')
+        );
       },
     },
     {
@@ -160,13 +154,34 @@ function getData(page: number) {
   getList();
 }
 function handleEdit(row: ChannelRow) {
-  selectId.value = row.ID;
-  dialogRef.value.showModal();
+  selectId.value = row.ID as string;
+  nextTick(() => {
+    dialogRef.value.showModal();
+  });
 }
 function handleDel(row: ChannelRow) {
   console.log(row.ID);
-  const dialog = useModal({ closable: true, width: 600 });
-  console.log(dialog);
+  const d = window.$dialog?.warning({
+    title: '警告',
+    content: `你确定要删除(${row.AppName})吗？`,
+    positiveText: '确定',
+    negativeText: '取消',
+    onPositiveClick: () => {
+      console.log('确定');
+      d.loading = true;
+      return new Promise((resolve) => {
+        channelDelete(row)
+          .then(() => {
+            window.$message.success('删除成功');
+            getList();
+          })
+          .then(resolve);
+      });
+    },
+    onNegativeClick: () => {
+      console.log('取消');
+    },
+  });
 }
 
 // 新建｜编辑处理
@@ -177,6 +192,7 @@ function handleAdd() {
   dialogRef.value.showModal();
 }
 function updateAdd() {
+  getList();
   console.log();
 }
 </script>

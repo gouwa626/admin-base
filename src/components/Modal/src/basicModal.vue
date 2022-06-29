@@ -7,7 +7,11 @@
     :style="`width:${getBindValue.width}px`"
   >
     <template #header>
-      <div class="w-full" id="basic-modal-bar" :class="needDrag && 'cursor-move'">
+      <div
+        class="w-full"
+        id="basic-modal-bar"
+        :class="needDrag && 'cursor-move'"
+      >
         <slot name="title" v-if="$slots.title"></slot>
         <div class="wh-full" v-else>{{ getBindValue.title }}</div>
       </div>
@@ -47,12 +51,12 @@ import { basicProps } from './props';
 import startDrag from '@/utils/drag';
 import { deepMerge } from '@/utils';
 import { ModalProps, ModalMethods } from './type';
-import { useBodyScroll } from '@/hooks';
+// import { useBodyScroll } from '@/hooks';
 
 const attrs = useAttrs();
 const props = defineProps({ ...basicProps });
 const emit = defineEmits(['on-close', 'on-sub', 'register']);
-const { scrollBodyHandler } = useBodyScroll();
+// const { scrollBodyHandler } = useBodyScroll();
 const propsRef = ref<Partial<ModalProps> | null>(null);
 
 const isModal = ref(false);
@@ -127,10 +131,10 @@ const instance = getCurrentInstance();
 if (instance) {
   emit('register', modalMethods);
 }
-watch(
-  () => isModal.value,
-  (newValue) => scrollBodyHandler(newValue)
-);
+// watch(
+//   () => isModal.value,
+//   (newValue) => scrollBodyHandler(newValue)
+// );
 </script>
 
 <style lang="scss">

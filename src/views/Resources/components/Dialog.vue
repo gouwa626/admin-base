@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { useModal } from '@/components/Modal';
 import basicModal from '@/components/Modal/src/basicModal.vue';
-import { nextTick, ref } from 'vue';
+import { ref, watch } from 'vue';
 import { channelAdd, channelDetail, channelUpdate } from '@/api/channel';
 import { cloneDeep } from 'lodash';
 import { VerifyList, AppTypeList } from '@/mock/enums';
@@ -80,21 +80,25 @@ let [addmodelRegister, { openModal, closeModal: close }] = useModal({
   closable: true,
   width: 600,
 });
-const init = async () => {
-  console.log(props.selectId);
-};
-init();
 function showModal() {
   formModel.value = Object.assign(cloneDeep(defaultFormModel));
   formModel.value.AppSecret = randomString();
-  console.log('selectId', props.selectId);
-  modelTitle.value = props.selectId ? '编辑' : '新建';
-  if (props.selectId) {
-    getDetail();
-  }
   openModal();
 }
-
+// 监听传过来的ID
+watch(
+  props,
+  (val) => {
+    modelTitle.value = val.selectId ? '编辑' : '新建';
+    if (val.selectId) {
+      getDetail();
+    }
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 // 编辑时 获取详情
 function getDetail() {
   channelDetail(props.selectId).then((res) => {

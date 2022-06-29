@@ -11,12 +11,20 @@
           :render-icon="renderIcon"
         >
           <span>
-            <Icon v-if="breadcrumb.icon" :icon="breadcrumb.icon" class="breadcrumb-icon" />
+            <Icon
+              v-if="breadcrumb.icon"
+              :icon="breadcrumb.icon"
+              class="breadcrumb-icon"
+            />
             <span>{{ breadcrumb.nodeName }}</span>
           </span>
         </n-dropdown>
         <template v-else>
-          <Icon v-if="breadcrumb.icon" :icon="breadcrumb.icon" class="breadcrumb-icon" />
+          <Icon
+            v-if="breadcrumb.icon"
+            :icon="breadcrumb.icon"
+            class="breadcrumb-icon"
+          />
           <span>{{ breadcrumb.nodeName }}</span>
         </template>
       </n-breadcrumb-item>
@@ -40,7 +48,9 @@ const routeStore = useRouteStore();
 function renderIcon(option: DropdownOption) {
   return iconifyRender((option.icon || '') as string)();
 }
-const breadcrumbs = computed(() => setBreadcrumbs(cloneDeep(routeStore.routerInfos), route.path));
+const breadcrumbs = computed(() =>
+  setBreadcrumbs(cloneDeep(routeStore.routerInfos), route.path)
+);
 // 根据路由生成面包屑数据
 function setBreadcrumbs(arr: any, path: string): GlobalBreadcrumb[] {
   let res: GlobalBreadcrumb[] = [];
@@ -56,9 +66,15 @@ function setBreadcrumbs(arr: any, path: string): GlobalBreadcrumb[] {
       return res;
     }
     if (arr[i].children && arr[i].children?.length) {
-      let childRes = setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path);
+      let childRes = setBreadcrumbs(
+        arr[i].children as GlobalBreadcrumb[],
+        path
+      );
       if (childRes && childRes.length) {
-        res.push(arr[i], ...setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path));
+        res.push(
+          arr[i],
+          ...setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path)
+        );
         return res;
       }
     }

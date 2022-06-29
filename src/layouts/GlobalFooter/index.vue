@@ -3,7 +3,11 @@
     class="global-footer flex-center h-full"
     :style="[
       `padding-left:${
-        isVertical ? (isCollapse ? theme.siderNormalWidth : theme.siderCollapseWidth) : '0'
+        isVertical
+          ? isCollapse
+            ? theme.siderNormalWidth
+            : theme.siderCollapseWidth
+          : '0'
       }px;`,
     ]"
     tag="footer"

@@ -8,6 +8,12 @@ const GenerateAssetWebpackPluginForWebpack5 = require('generate-asset-webpack-pl
 // build时构建配置文件
 const configJson = require('./src/config/prod.json');
 module.exports = defineConfig({
+  chainWebpack: (config) => {
+    config.plugin('html').tap((args) => {
+      args[0].title = '网关管理系统';
+      return args;
+    });
+  },
   css: {
     loaderOptions: {
       sass: {

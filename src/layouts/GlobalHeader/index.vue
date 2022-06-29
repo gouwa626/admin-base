@@ -4,12 +4,20 @@
       class="global-header"
       :style="[
         `padding-left:${
-          isVertical ? (isCollapse ? theme.siderNormalWidth : theme.siderCollapseWidth) : '0'
+          isVertical
+            ? isCollapse
+              ? theme.siderNormalWidth
+              : theme.siderCollapseWidth
+            : '0'
         }px;`,
       ]"
       tag="header"
     >
-      <global-logo :show-title="true" v-if="!isVertical" style="width: 220px"></global-logo>
+      <global-logo
+        :show-title="true"
+        v-if="!isVertical"
+        style="width: 220px"
+      ></global-logo>
       <menu-collapse v-else></menu-collapse>
       <div class="header-left">
         <menu-provider v-if="!isVertical"></menu-provider>
@@ -27,7 +35,13 @@
 <script setup lang="ts">
 import { useThemeStore } from '@/store';
 import { computed } from 'vue';
-import { LayoutMode, ThemeMode, MenuCollapse, UserAvatar, GlobalBreadcrumb } from './components';
+import {
+  LayoutMode,
+  ThemeMode,
+  MenuCollapse,
+  UserAvatar,
+  GlobalBreadcrumb,
+} from './components';
 import GlobalLogo from '@/layouts/GlobalLogo/index.vue';
 import MenuProvider from '@/components/common/MenuProvider.vue';
 const theme = useThemeStore();

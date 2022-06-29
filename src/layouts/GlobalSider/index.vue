@@ -4,7 +4,11 @@
     tag="aside"
     :style="[
       `width:${
-        isVertical ? (isCollapse ? theme.siderNormalWidth : theme.siderCollapseWidth) : '0'
+        isVertical
+          ? isCollapse
+            ? theme.siderNormalWidth
+            : theme.siderCollapseWidth
+          : '0'
       }px;`,
     ]"
   >

@@ -6,44 +6,55 @@
   >
     <div class="form-warper">
       <n-form :model="formModel" label-placement="left" label-width="80px">
-        <n-form-item label="渠道名称" path="AppName">
-          <n-input
-            v-model:value="formModel.AppName"
-            placeholder="请输入渠道名称"
-          />
-        </n-form-item>
-        <n-form-item label="AppKey" path="AppKey">
-          <n-input
-            v-model:value="formModel.AppKey"
-            placeholder="请输入AppKey"
-          />
-        </n-form-item>
-        <n-form-item label="密钥" path="AppSecret">
-          <n-input
-            v-model:value="formModel.AppSecret"
-            placeholder="请输入密钥"
-          />
-        </n-form-item>
-        <n-form-item label="安全策略" path="VerifyType">
+        <n-form-item label="所属项目" path="ProjectId">
           <n-select
-            v-model:value="formModel.VerifyType"
-            :options="VerifyList"
-            placeholder="请输入安全策略"
+            v-model:value="formModel.ProjectId"
+            :options="enums.projectAllData"
+            @update:value="projectSelectUpdate"
+            placeholder="请选择所属项目"
+            label-field="ProjectName"
+            value-field="ID"
+            clearable
           />
         </n-form-item>
-        <n-form-item label="渠道类型" path="AppType">
+        <n-form-item label="分配资源" path="ResourceId">
           <n-select
-            v-model:value="formModel.AppType"
-            :options="AppTypeList"
-            placeholder="请输入渠道类型"
+            v-model:value="formModel.ResourceId"
+            :options="ResourceList"
+            placeholder="请选择分配资源"
+            label-field="ResourceName"
+            value-field="ID"
+          ></n-select>
+        </n-form-item>
+        <n-form-item label="分配渠道" path="AppId">
+          <n-select
+            v-model:value="formModel.AppId"
+            :options="enums.channelAllData"
+            label-field="AppName"
+            value-field="ID"
+            placeholder="请选择分配渠道"
           />
         </n-form-item>
-        <n-form-item label="系统状态" path="AppMemo">
+        <n-form-item label="限流策略" path="LimitConfig">
           <n-input
-            v-model:value="formModel.AppMemo"
+            v-model:value="formModel.LimitConfig"
             type="textarea"
-            placeholder="请输入系统状态"
+            placeholder="请输入限流策略"
           />
+        </n-form-item>
+        <n-form-item label="备注" path="AuthorizationMemo">
+          <n-input
+            v-model:value="formModel.AuthorizationMemo"
+            type="textarea"
+            placeholder="请输入备注"
+          />
+        </n-form-item>
+        <n-form-item label="状态" path="AuthorizationStatus">
+          <n-select
+            v-model:value="formModel.AuthorizationStatus"
+            :options="StatusTypeList"
+            placeholder="请选择状态"
+          ></n-select>
         </n-form-item>
       </n-form>
     </div>
@@ -53,42 +64,37 @@
 <script setup lang="ts">
 import { useModal } from '@/components/Modal';
 import basicModal from '@/components/Modal/src/basicModal.vue';
-import { nextTick, ref } from 'vue';
-import { channelAdd, channelDetail, channelUpdate } from '@/api/channel';
+import { ref } from 'vue';
+import { toauthAdd, toauthDetail, toauthUpdate } from '@/api/toauth';
 import { cloneDeep } from 'lodash';
-import { VerifyList, AppTypeList } from '@/mock/enums';
-import { ChannelRow } from '@/typings/channel';
-import { randomString } from '@/utils';
+import { StatusTypeList } from '@/mock/enums';
+import { ToAuthRow } from '@/typings/toauth';
+import { findLabel } from '@/utils';
+import { useEnumsDataStore } from '@/store';
+import { projectResource } from '@/api/project';
 interface Props {
   selectId: string | number;
 }
-const defaultFormModel: ChannelRow = {
-  AppKey: '',
-  AppName: '',
-  AppMemo: '',
-  AppSecret: '',
-  AppType: 0,
-  VerifyType: 0,
-  CreateTime: '',
-  ModifyTime: '',
+const defaultFormModel: ToAuthRow = {
+  ProjectId: null,
+  AppId: null,
+  AuthorizationMemo: '',
+  LimitConfig: '',
+  ResourceId: null,
+  AuthorizationStatus: 1,
 };
 const props = defineProps<Props>();
 const emit = defineEmits(['submit', 'register']);
 const formModel = ref(cloneDeep(defaultFormModel));
 const modelTitle = ref('新建');
+const enums = useEnumsDataStore();
 let [addmodelRegister, { openModal, closeModal: close }] = useModal({
   closable: true,
   width: 600,
 });
-const init = async () => {
-  console.log(props.selectId);
-};
-init();
 function showModal() {
   formModel.value = Object.assign(cloneDeep(defaultFormModel));
-  formModel.value.AppSecret = randomString();
-  console.log('selectId', props.selectId);
-  modelTitle.value = props.selectId ? '编辑' : '新建';
+  modelTitle.value = `${props.selectId ? '编辑' : '新建'}资源授权`;
   if (props.selectId) {
     getDetail();
   }
@@ -97,8 +103,15 @@ function showModal() {
 
 // 编辑时 获取详情
 function getDetail() {
-  channelDetail(props.selectId).then((res) => {
-    formModel.value = Object.assign(cloneDeep(defaultFormModel), res.data);
+  toauthDetail(props.selectId).then((res) => {
+    formModel.value = Object.assign(cloneDeep(defaultFormModel), res);
+    formModel.value.ProjectId = findLabel(
+      enums.resourceAllData,
+      formModel.value.ResourceId as string,
+      'ID',
+      'ProjectId'
+    );
+    projectSelectUpdate(formModel.value.ProjectId as string);
   });
 }
 function closeModal() {
@@ -107,13 +120,13 @@ function closeModal() {
 }
 function handleClickSubmit() {
   if (formModel.value.ID) {
-    channelUpdate(formModel.value).then(() => {
+    toauthUpdate(formModel.value).then(() => {
       emit('submit', formModel.value);
       window.$message.success('编辑成功');
       close();
     });
   } else {
-    channelAdd(formModel.value).then(() => {
+    toauthAdd(formModel.value).then(() => {
       emit('submit', formModel.value);
       window.$message.success('添加成功');
       close();
@@ -121,6 +134,18 @@ function handleClickSubmit() {
   }
 }
 defineExpose({ showModal });
+const ResourceList = ref([]);
+function projectSelectUpdate(val: string) {
+  if (!val) {
+    ResourceList.value = [];
+    formModel.value.ResourceId = null;
+    return;
+  }
+  projectResource(val).then((res) => {
+    console.log(res);
+    ResourceList.value = res.data;
+  });
+}
 </script>
 
 <style scoped lang="scss">

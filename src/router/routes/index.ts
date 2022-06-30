@@ -20,9 +20,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Channel/index.vue'),
       },
       {
-        path: 'resources',
-        name: 'resources',
-        component: () => import('@/views/Resources/index.vue'),
+        path: 'resource',
+        name: 'resource',
+        component: () => import('@/views/Resource/index.vue'),
       },
       {
         path: 'project',

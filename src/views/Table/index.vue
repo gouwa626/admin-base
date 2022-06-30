@@ -126,7 +126,7 @@ function getData(page: number) {
   if (!loading.value) {
     loading.value = true;
     setData(page).then((res: any) => {
-      data.value = res.data;
+      data.value = res;
       pagination.itemCount = res.total;
       loading.value = false;
     });

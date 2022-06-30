@@ -1,5 +1,5 @@
 <template>
-  <n-space>
+  <!-- <n-space>
     <n-form
       ref="formRef"
       label-placement="left"
@@ -23,9 +23,9 @@
       </n-form-item>
     </n-form>
   </n-space>
-  <n-divider />
+  <n-divider /> -->
   <n-space vertical :size="12">
-    <n-button type="primary" @click="handleAdd">新建渠道</n-button>
+    <n-button type="primary" @click="handleAdd">新建项目</n-button>
     <n-data-table
       remote
       size="small"
@@ -36,6 +36,7 @@
       :pagination="pagination"
       :single-line="false"
       @update-page="getData"
+      striped
     />
   </n-space>
   <Dialog ref="dialogRef" :selectId="selectId" @submit="updateAdd"></Dialog>
@@ -44,10 +45,12 @@
 <script lang="ts" setup>
 import { ref, h, reactive, nextTick } from 'vue';
 import { FormInst, DataTableColumns, NButton, PaginationInfo } from 'naive-ui';
-import { channelDelete, channelList } from '@/api/channel';
+import { projectDelete, projectList } from '@/api/project';
 import Dialog from './components/Dialog.vue';
 import dayjs from 'dayjs';
-import { ChannelRow } from '@/typings/channel';
+import { ProjectRow } from '@/typings/project';
+import { findLabel } from '@/utils';
+import { AppTypeList, VerifyList } from '@/mock/enums';
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
   user: {
@@ -61,30 +64,41 @@ function handleValidateClick() {
   getList();
 }
 // 表格相关
-const rowKey = (rowData: ChannelRow) => rowData.ID as string;
+const rowKey = (rowData: ProjectRow) => rowData.ID as string;
 const columnsFuc = ({
   handleEdit,
   handleDel,
 }: {
-  handleEdit: (row: ChannelRow) => void;
-  handleDel: (row: ChannelRow) => void;
-}): DataTableColumns<ChannelRow> => {
+  handleEdit: (row: ProjectRow) => void;
+  handleDel: (row: ProjectRow) => void;
+}): DataTableColumns<ProjectRow> => {
   return [
     // {
     //   title: 'ID',
     //   key: 'ID',
     // },
     {
-      title: '渠道名称',
-      key: 'AppName',
+      title: '项目名称',
+      key: 'ProjectName',
     },
     {
-      title: 'AppKey',
-      key: 'AppKey',
+      title: '项目前缀',
+      key: 'Prefix',
     },
     {
-      title: '密钥',
-      key: 'AppSecret',
+      title: '项目类型',
+      key: 'ProjectType',
+      render(row) {
+        return h('span', {}, findLabel(AppTypeList, row.ProjectType));
+      },
+    },
+    {
+      title: '访问地址',
+      key: 'ProjectPath',
+    },
+    {
+      title: '备注',
+      key: 'ProjectMemo',
     },
     {
       title: '修改时间',
@@ -141,10 +155,10 @@ const pagination = reactive<PaginationInfo>({
 });
 function getList() {
   loading.value = true;
-  channelList(pagination).then((res) => {
+  projectList(pagination).then((res) => {
     console.log(res);
-    data.value = res.data.data;
-    pagination.itemCount = res.data.count;
+    data.value = res.data;
+    pagination.itemCount = res.count;
     loading.value = false;
   });
 }
@@ -153,24 +167,24 @@ function getData(page: number) {
   pagination.page = page;
   getList();
 }
-function handleEdit(row: ChannelRow) {
+function handleEdit(row: ProjectRow) {
   selectId.value = row.ID as string;
   nextTick(() => {
     dialogRef.value.showModal();
   });
 }
-function handleDel(row: ChannelRow) {
+function handleDel(row: ProjectRow) {
   console.log(row.ID);
   const d = window.$dialog?.warning({
     title: '警告',
-    content: `你确定要删除(${row.AppName})吗？`,
+    content: `你确定要删除(${row.ProjectName})吗？`,
     positiveText: '确定',
     negativeText: '取消',
     onPositiveClick: () => {
       console.log('确定');
       d.loading = true;
       return new Promise((resolve) => {
-        channelDelete(row)
+        projectDelete(row)
           .then(() => {
             window.$message.success('删除成功');
             getList();
@@ -189,7 +203,9 @@ const selectId = ref('');
 const dialogRef = ref();
 function handleAdd() {
   selectId.value = '';
-  dialogRef.value.showModal();
+  nextTick(() => {
+    dialogRef.value.showModal();
+  });
 }
 function updateAdd() {
   getList();

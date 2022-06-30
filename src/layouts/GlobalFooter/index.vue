@@ -12,7 +12,7 @@
     ]"
     tag="footer"
   >
-    底部
+    GATEWAY_V2@2022
   </DarkModeContainer>
 </template>
 

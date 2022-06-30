@@ -8,12 +8,13 @@ import { Icon } from '@iconify/vue';
  * @param size - 图标大小
  */
 export function iconifyRender(icon: string, color?: string, size?: number) {
-  const style: { color?: string; size?: string } = {};
+  const style: { color?: string; size?: string; fill?: string } = {};
   if (color) {
     style.color = color;
   }
   if (size) {
     style.size = `${size}px`;
+    style.fill = 'currentColor';
   }
   return () => h(Icon, { icon, style });
 }

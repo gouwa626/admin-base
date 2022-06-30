@@ -53,7 +53,9 @@ module.exports = defineConfig({
         // 自动安装
         // autoInstall: true,
         customCollections: {
-          custom: FileSystemIconLoader('src/assets/svg'),
+          custom: FileSystemIconLoader('src/assets/svg', (svg) =>
+            svg.replace(/^<svg /, '<svg fill="currentColor" ')
+          ),
         },
         scale: 1,
         defaultClass: 'inline-block',

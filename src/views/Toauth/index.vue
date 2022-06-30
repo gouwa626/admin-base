@@ -1,5 +1,5 @@
 <template>
-  <n-space>
+  <!-- <n-space>
     <n-form
       ref="formRef"
       label-placement="left"
@@ -23,9 +23,9 @@
       </n-form-item>
     </n-form>
   </n-space>
-  <n-divider />
+  <n-divider /> -->
   <n-space vertical :size="12">
-    <n-button type="primary" @click="handleAdd">新建渠道</n-button>
+    <n-button type="primary" @click="handleAdd">新建资源授权</n-button>
     <n-data-table
       remote
       size="small"
@@ -36,6 +36,7 @@
       :pagination="pagination"
       :single-line="false"
       @update-page="getData"
+      striped
     />
   </n-space>
   <Dialog ref="dialogRef" :selectId="selectId" @submit="updateAdd"></Dialog>
@@ -44,10 +45,14 @@
 <script lang="ts" setup>
 import { ref, h, reactive, nextTick } from 'vue';
 import { FormInst, DataTableColumns, NButton, PaginationInfo } from 'naive-ui';
-import { channelDelete, channelList } from '@/api/channel';
+import { toauthDelete, toauthList } from '@/api/toauth';
 import Dialog from './components/Dialog.vue';
 import dayjs from 'dayjs';
-import { ChannelRow } from '@/typings/channel';
+import { ToAuthRow } from '@/typings/toauth';
+import { findLabel } from '@/utils';
+import { AppTypeList, StatusTypeList, VerifyList } from '@/mock/enums';
+import { useEnumsDataStore } from '@/store';
+const enums = useEnumsDataStore();
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
   user: {
@@ -61,14 +66,14 @@ function handleValidateClick() {
   getList();
 }
 // 表格相关
-const rowKey = (rowData: ChannelRow) => rowData.ID as string;
+const rowKey = (rowData: ToAuthRow) => rowData.ID as string;
 const columnsFuc = ({
   handleEdit,
   handleDel,
 }: {
-  handleEdit: (row: ChannelRow) => void;
-  handleDel: (row: ChannelRow) => void;
-}): DataTableColumns<ChannelRow> => {
+  handleEdit: (row: ToAuthRow) => void;
+  handleDel: (row: ToAuthRow) => void;
+}): DataTableColumns<ToAuthRow> => {
   return [
     // {
     //   title: 'ID',
@@ -76,15 +81,103 @@ const columnsFuc = ({
     // },
     {
       title: '渠道名称',
-      key: 'AppName',
+      key: 'AppId',
+      render(row) {
+        return [
+          h(
+            'div',
+            {},
+            findLabel(
+              enums.channelAllData,
+              row.AppId as string,
+              'ID',
+              'AppName'
+            )
+          ),
+          h(
+            'div',
+            {},
+            `【${findLabel(
+              enums.channelAllData,
+              row.AppId as string,
+              'ID',
+              'AppKey'
+            )}】`
+          ),
+        ];
+      },
     },
     {
-      title: 'AppKey',
-      key: 'AppKey',
+      title: '项目名称',
+      key: 'Prefix',
+      render(row) {
+        return h(
+          'span',
+          {},
+          findLabel(
+            enums.projectAllData,
+            findLabel(
+              enums.resourceAllData,
+              row.ResourceId as string,
+              'ID',
+              'ProjectId'
+            ),
+            'ID',
+            'ProjectName'
+          )
+        );
+      },
     },
     {
-      title: '密钥',
-      key: 'AppSecret',
+      title: '资源名称',
+      key: 'ResourceId',
+      render(row) {
+        return h(
+          'span',
+          {},
+          findLabel(
+            enums.resourceAllData,
+            row.ResourceId as string,
+            'ID',
+            'ResourceName'
+          )
+        );
+      },
+    },
+    {
+      title: '资源路径',
+      key: 'Prefix',
+      render(row) {
+        return h(
+          'span',
+          {},
+          findLabel(
+            enums.resourceAllData,
+            row.ResourceId as string,
+            'ID',
+            'ResourcePath'
+          )
+        );
+      },
+    },
+    {
+      title: '限流策略',
+      key: 'LimitConfig',
+    },
+    {
+      title: '状态',
+      key: 'AuthorizationStatus',
+      render(row) {
+        return h(
+          'span',
+          {},
+          findLabel(StatusTypeList, row.AuthorizationStatus as number)
+        );
+      },
+    },
+    {
+      title: '备注',
+      key: 'AuthorizationMemo',
     },
     {
       title: '修改时间',
@@ -141,10 +234,10 @@ const pagination = reactive<PaginationInfo>({
 });
 function getList() {
   loading.value = true;
-  channelList(pagination).then((res) => {
+  toauthList(pagination).then((res) => {
     console.log(res);
-    data.value = res.data.data;
-    pagination.itemCount = res.data.count;
+    data.value = res.data;
+    pagination.itemCount = res.count;
     loading.value = false;
   });
 }
@@ -153,24 +246,24 @@ function getData(page: number) {
   pagination.page = page;
   getList();
 }
-function handleEdit(row: ChannelRow) {
+function handleEdit(row: ToAuthRow) {
   selectId.value = row.ID as string;
   nextTick(() => {
     dialogRef.value.showModal();
   });
 }
-function handleDel(row: ChannelRow) {
+function handleDel(row: ToAuthRow) {
   console.log(row.ID);
   const d = window.$dialog?.warning({
     title: '警告',
-    content: `你确定要删除(${row.AppName})吗？`,
+    content: `你确定要删除该授权吗？`,
     positiveText: '确定',
     negativeText: '取消',
     onPositiveClick: () => {
       console.log('确定');
       d.loading = true;
       return new Promise((resolve) => {
-        channelDelete(row)
+        toauthDelete(row)
           .then(() => {
             window.$message.success('删除成功');
             getList();
@@ -189,7 +282,9 @@ const selectId = ref('');
 const dialogRef = ref();
 function handleAdd() {
   selectId.value = '';
-  dialogRef.value.showModal();
+  nextTick(() => {
+    dialogRef.value.showModal();
+  });
 }
 function updateAdd() {
   getList();

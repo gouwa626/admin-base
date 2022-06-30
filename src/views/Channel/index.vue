@@ -1,5 +1,5 @@
 <template>
-  <n-space>
+  <!-- <n-space>
     <n-form
       ref="formRef"
       label-placement="left"
@@ -23,7 +23,7 @@
       </n-form-item>
     </n-form>
   </n-space>
-  <n-divider />
+  <n-divider /> -->
   <n-space vertical :size="12">
     <n-button type="primary" @click="handleAdd">新建渠道</n-button>
     <n-data-table
@@ -36,6 +36,7 @@
       :pagination="pagination"
       :single-line="false"
       @update-page="getData"
+      striped
     />
   </n-space>
   <Dialog ref="dialogRef" :selectId="selectId" @submit="updateAdd"></Dialog>
@@ -48,6 +49,8 @@ import { channelDelete, channelList } from '@/api/channel';
 import Dialog from './components/Dialog.vue';
 import dayjs from 'dayjs';
 import { ChannelRow } from '@/typings/channel';
+import { findLabel } from '@/utils';
+import { AppTypeList, VerifyList } from '@/mock/enums';
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
   user: {
@@ -85,6 +88,24 @@ const columnsFuc = ({
     {
       title: '密钥',
       key: 'AppSecret',
+    },
+    {
+      title: '渠道类型',
+      key: 'AppType',
+      render(row) {
+        return h('span', {}, findLabel(AppTypeList, row.AppType));
+      },
+    },
+    {
+      title: '安全策略',
+      key: 'VerifyType',
+      render(row) {
+        return h('span', {}, findLabel(VerifyList, row.VerifyType));
+      },
+    },
+    {
+      title: '备注',
+      key: 'AppMemo',
     },
     {
       title: '修改时间',
@@ -143,8 +164,8 @@ function getList() {
   loading.value = true;
   channelList(pagination).then((res) => {
     console.log(res);
-    data.value = res.data.data;
-    pagination.itemCount = res.data.count;
+    data.value = res.data;
+    pagination.itemCount = res.count;
     loading.value = false;
   });
 }
@@ -160,7 +181,6 @@ function handleEdit(row: ChannelRow) {
   });
 }
 function handleDel(row: ChannelRow) {
-  console.log(row.ID);
   const d = window.$dialog?.warning({
     title: '警告',
     content: `你确定要删除(${row.AppName})吗？`,
@@ -189,7 +209,9 @@ const selectId = ref('');
 const dialogRef = ref();
 function handleAdd() {
   selectId.value = '';
-  dialogRef.value.showModal();
+  nextTick(() => {
+    dialogRef.value.showModal();
+  });
 }
 function updateAdd() {
   getList();

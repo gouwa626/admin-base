@@ -1,5 +1,5 @@
 <template>
-  <n-space>
+  <!-- <n-space>
     <n-form
       ref="formRef"
       label-placement="left"
@@ -23,9 +23,9 @@
       </n-form-item>
     </n-form>
   </n-space>
-  <n-divider />
+  <n-divider /> -->
   <n-space vertical :size="12">
-    <n-button type="primary" @click="handleAdd">新建渠道</n-button>
+    <n-button type="primary" @click="handleAdd">新建资源</n-button>
     <n-data-table
       remote
       size="small"
@@ -36,6 +36,7 @@
       :pagination="pagination"
       :single-line="false"
       @update-page="getData"
+      striped
     />
   </n-space>
   <Dialog ref="dialogRef" :selectId="selectId" @submit="updateAdd"></Dialog>
@@ -44,10 +45,13 @@
 <script lang="ts" setup>
 import { ref, h, reactive, nextTick } from 'vue';
 import { FormInst, DataTableColumns, NButton, PaginationInfo } from 'naive-ui';
-import { channelDelete, channelList } from '@/api/channel';
+import { resourceDelete, resourceList } from '@/api/resource';
 import Dialog from './components/Dialog.vue';
 import dayjs from 'dayjs';
-import { ChannelRow } from '@/typings/channel';
+import { ResourceRow } from '@/typings/resource';
+import { findLabel } from '@/utils';
+import { AppTypeList, VerifyList } from '@/mock/enums';
+import { useEnumsDataStore } from '@/store';
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
   user: {
@@ -60,35 +64,73 @@ function handleValidateClick() {
   pagination.page = 1;
   getList();
 }
+const enums = useEnumsDataStore();
 // 表格相关
-const rowKey = (rowData: ChannelRow) => rowData.ID as string;
+const rowKey = (rowData: ResourceRow) => rowData.ID as string;
 const columnsFuc = ({
   handleEdit,
   handleDel,
 }: {
-  handleEdit: (row: ChannelRow) => void;
-  handleDel: (row: ChannelRow) => void;
-}): DataTableColumns<ChannelRow> => {
+  handleEdit: (row: ResourceRow) => void;
+  handleDel: (row: ResourceRow) => void;
+}): DataTableColumns<ResourceRow> => {
   return [
     // {
     //   title: 'ID',
     //   key: 'ID',
     // },
     {
-      title: '渠道名称',
-      key: 'AppName',
+      title: '资源名称',
+      key: 'ResourceName',
     },
     {
-      title: 'AppKey',
-      key: 'AppKey',
+      title: '所属项目',
+      key: 'ProjectId',
+      render(row) {
+        return h(
+          'span',
+          {},
+          findLabel(
+            enums.projectAllData,
+            row.ProjectId as string,
+            'ID',
+            'ProjectName'
+          )
+        );
+      },
     },
     {
-      title: '密钥',
-      key: 'AppSecret',
+      title: '访问路径',
+      key: 'ResourcePath',
+    },
+    {
+      title: '权重级别',
+      key: 'SortWeight',
+    },
+    {
+      title: '验签类型',
+      key: 'ResourcePath',
+    },
+    {
+      title: '超时时间',
+      key: 'Timeout',
+    },
+    {
+      title: '重试次数',
+      key: 'RetryTime',
+    },
+    {
+      title: '时间戳有效期',
+      key: 'TimestampFlag',
+    },
+    {
+      title: '备注',
+      key: 'ProjectMemo',
     },
     {
       title: '修改时间',
       key: 'ModifyTime',
+      width: 100,
       render(row) {
         return h(
           'span',
@@ -100,6 +142,7 @@ const columnsFuc = ({
     {
       title: '操作',
       key: 'handle',
+      width: 140,
       render(row) {
         return [
           h(
@@ -141,10 +184,10 @@ const pagination = reactive<PaginationInfo>({
 });
 function getList() {
   loading.value = true;
-  channelList(pagination).then((res) => {
+  resourceList(pagination).then((res) => {
     console.log(res);
-    data.value = res.data.data;
-    pagination.itemCount = res.data.count;
+    data.value = res.data;
+    pagination.itemCount = res.count;
     loading.value = false;
   });
 }
@@ -153,24 +196,24 @@ function getData(page: number) {
   pagination.page = page;
   getList();
 }
-function handleEdit(row: ChannelRow) {
+function handleEdit(row: ResourceRow) {
   selectId.value = row.ID as string;
   nextTick(() => {
     dialogRef.value.showModal();
   });
 }
-function handleDel(row: ChannelRow) {
+function handleDel(row: ResourceRow) {
   console.log(row.ID);
   const d = window.$dialog?.warning({
     title: '警告',
-    content: `你确定要删除(${row.AppName})吗？`,
+    content: `你确定要删除(${row.ResourceName})吗？`,
     positiveText: '确定',
     negativeText: '取消',
     onPositiveClick: () => {
       console.log('确定');
       d.loading = true;
       return new Promise((resolve) => {
-        channelDelete(row)
+        resourceDelete(row)
           .then(() => {
             window.$message.success('删除成功');
             getList();
@@ -189,7 +232,9 @@ const selectId = ref('');
 const dialogRef = ref();
 function handleAdd() {
   selectId.value = '';
-  dialogRef.value.showModal();
+  nextTick(() => {
+    dialogRef.value.showModal();
+  });
 }
 function updateAdd() {
   getList();

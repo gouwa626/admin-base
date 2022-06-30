@@ -38,11 +38,11 @@
             placeholder="请输入渠道类型"
           />
         </n-form-item>
-        <n-form-item label="系统状态" path="AppMemo">
+        <n-form-item label="备注" path="AppMemo">
           <n-input
             v-model:value="formModel.AppMemo"
             type="textarea"
-            placeholder="请输入系统状态"
+            placeholder="请输入备注"
           />
         </n-form-item>
       </n-form>
@@ -80,15 +80,11 @@ let [addmodelRegister, { openModal, closeModal: close }] = useModal({
   closable: true,
   width: 600,
 });
-const init = async () => {
-  console.log(props.selectId);
-};
-init();
 function showModal() {
   formModel.value = Object.assign(cloneDeep(defaultFormModel));
   formModel.value.AppSecret = randomString();
   console.log('selectId', props.selectId);
-  modelTitle.value = props.selectId ? '编辑' : '新建';
+  modelTitle.value = `${props.selectId ? '编辑' : '新建'}渠道`;
   if (props.selectId) {
     getDetail();
   }
@@ -98,7 +94,7 @@ function showModal() {
 // 编辑时 获取详情
 function getDetail() {
   channelDetail(props.selectId).then((res) => {
-    formModel.value = Object.assign(cloneDeep(defaultFormModel), res.data);
+    formModel.value = Object.assign(cloneDeep(defaultFormModel), res);
   });
 }
 function closeModal() {

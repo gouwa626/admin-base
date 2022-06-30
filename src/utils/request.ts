@@ -12,7 +12,7 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   (response) => {
     if (response.data.code == 1000) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data.data);
     } else {
       window.$message.error(`接口请求异常，请检查`);
       return Promise.reject(response.data);

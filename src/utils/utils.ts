@@ -21,8 +21,19 @@ export function getDynamicProps<T, U>(props: T): Partial<U> {
   return ret as Partial<U>;
 }
 
-export function findLabel(list: Array<any>, value: number | string) {
-  list.find((item) => item.value == value);
+export function findLabel(
+  list: Array<any>,
+  value: number | string = '',
+  key = 'value',
+  returnKey = 'label'
+) {
+  try {
+    const res = list.find((item) => item[key] == value);
+    return res ? res[returnKey] : '';
+  } catch (error) {
+    console.log(error);
+    return '-';
+  }
 }
 
 export function randomString(e = 10) {

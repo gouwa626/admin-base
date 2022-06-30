@@ -48,7 +48,7 @@ export const mockRouters: Route.RouterInfo[] = [
     nodeId: '84165b241c434766924b9de018c79907',
     nodeName: '资源管理',
     nodeCode: 'F-01001-004',
-    url: '/resources',
+    url: '/resource',
     icon: 'material-symbols:data-thresholding',
     portalIcon: null,
     location: '',

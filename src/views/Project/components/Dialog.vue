@@ -6,43 +6,36 @@
   >
     <div class="form-warper">
       <n-form :model="formModel" label-placement="left" label-width="80px">
-        <n-form-item label="渠道名称" path="AppName">
+        <n-form-item label="项目名称" path="ProjectName">
           <n-input
-            v-model:value="formModel.AppName"
-            placeholder="请输入渠道名称"
+            v-model:value="formModel.ProjectName"
+            placeholder="请输入项目名称"
           />
         </n-form-item>
-        <n-form-item label="AppKey" path="AppKey">
+        <n-form-item label="项目前缀" path="Prefix">
           <n-input
-            v-model:value="formModel.AppKey"
-            placeholder="请输入AppKey"
+            v-model:value="formModel.Prefix"
+            placeholder="请输入项目前缀"
           />
         </n-form-item>
-        <n-form-item label="密钥" path="AppSecret">
+        <n-form-item label="访问地址" path="ProjectPath">
           <n-input
-            v-model:value="formModel.AppSecret"
-            placeholder="请输入密钥"
+            v-model:value="formModel.ProjectPath"
+            placeholder="请输入访问地址"
           />
         </n-form-item>
-        <n-form-item label="安全策略" path="VerifyType">
+        <n-form-item label="项目类型" path="ProjectType">
           <n-select
-            v-model:value="formModel.VerifyType"
-            :options="VerifyList"
-            placeholder="请输入安全策略"
+            v-model:value="formModel.ProjectType"
+            :options="ProjectTypeList"
+            placeholder="请输入项目类型"
           />
         </n-form-item>
-        <n-form-item label="渠道类型" path="AppType">
-          <n-select
-            v-model:value="formModel.AppType"
-            :options="AppTypeList"
-            placeholder="请输入渠道类型"
-          />
-        </n-form-item>
-        <n-form-item label="系统状态" path="AppMemo">
+        <n-form-item label="备注" path="ProjectMemo">
           <n-input
-            v-model:value="formModel.AppMemo"
+            v-model:value="formModel.ProjectMemo"
             type="textarea"
-            placeholder="请输入系统状态"
+            placeholder="请输入备注"
           />
         </n-form-item>
       </n-form>
@@ -54,23 +47,20 @@
 import { useModal } from '@/components/Modal';
 import basicModal from '@/components/Modal/src/basicModal.vue';
 import { nextTick, ref } from 'vue';
-import { channelAdd, channelDetail, channelUpdate } from '@/api/channel';
+import { projectAdd, projectDetail, projectUpdate } from '@/api/project';
 import { cloneDeep } from 'lodash';
-import { VerifyList, AppTypeList } from '@/mock/enums';
-import { ChannelRow } from '@/typings/channel';
+import { ProjectTypeList } from '@/mock/enums';
+import { ProjectRow } from '@/typings/project';
 import { randomString } from '@/utils';
 interface Props {
   selectId: string | number;
 }
-const defaultFormModel: ChannelRow = {
-  AppKey: '',
-  AppName: '',
-  AppMemo: '',
-  AppSecret: '',
-  AppType: 0,
-  VerifyType: 0,
-  CreateTime: '',
-  ModifyTime: '',
+const defaultFormModel: ProjectRow = {
+  Prefix: '',
+  ProjectMemo: '',
+  ProjectName: '',
+  ProjectPath: '',
+  ProjectType: 0,
 };
 const props = defineProps<Props>();
 const emit = defineEmits(['submit', 'register']);
@@ -80,15 +70,10 @@ let [addmodelRegister, { openModal, closeModal: close }] = useModal({
   closable: true,
   width: 600,
 });
-const init = async () => {
-  console.log(props.selectId);
-};
-init();
 function showModal() {
   formModel.value = Object.assign(cloneDeep(defaultFormModel));
-  formModel.value.AppSecret = randomString();
   console.log('selectId', props.selectId);
-  modelTitle.value = props.selectId ? '编辑' : '新建';
+  modelTitle.value = `${props.selectId ? '编辑' : '新建'}项目`;
   if (props.selectId) {
     getDetail();
   }
@@ -97,8 +82,8 @@ function showModal() {
 
 // 编辑时 获取详情
 function getDetail() {
-  channelDetail(props.selectId).then((res) => {
-    formModel.value = Object.assign(cloneDeep(defaultFormModel), res.data);
+  projectDetail(props.selectId).then((res) => {
+    formModel.value = Object.assign(cloneDeep(defaultFormModel), res);
   });
 }
 function closeModal() {
@@ -107,13 +92,13 @@ function closeModal() {
 }
 function handleClickSubmit() {
   if (formModel.value.ID) {
-    channelUpdate(formModel.value).then(() => {
+    projectUpdate(formModel.value).then(() => {
       emit('submit', formModel.value);
       window.$message.success('编辑成功');
       close();
     });
   } else {
-    channelAdd(formModel.value).then(() => {
+    projectAdd(formModel.value).then(() => {
       emit('submit', formModel.value);
       window.$message.success('添加成功');
       close();

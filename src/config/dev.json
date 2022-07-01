@@ -1,3 +1,4 @@
 {
-  "baseUrl":"http://10.155.109.190:80"
+  "baseUrl":"http://localhost:80",
+  "baseUrlOld":"http://10.155.109.190:80"
 }

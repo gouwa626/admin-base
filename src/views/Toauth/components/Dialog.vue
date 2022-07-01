@@ -23,6 +23,7 @@
             :options="ResourceList"
             placeholder="请选择分配资源"
             label-field="ResourceName"
+            :render-label="renderResourceOptionLabel"
             value-field="ID"
           ></n-select>
         </n-form-item>
@@ -30,6 +31,7 @@
           <n-select
             v-model:value="formModel.AppId"
             :options="enums.channelAllData"
+            :render-label="renderChannelOptionLabel"
             label-field="AppName"
             value-field="ID"
             placeholder="请选择分配渠道"
@@ -64,7 +66,7 @@
 <script setup lang="ts">
 import { useModal } from '@/components/Modal';
 import basicModal from '@/components/Modal/src/basicModal.vue';
-import { ref } from 'vue';
+import { h, ref, VNodeChild } from 'vue';
 import { toauthAdd, toauthDetail, toauthUpdate } from '@/api/toauth';
 import { cloneDeep } from 'lodash';
 import { StatusTypeList } from '@/mock/enums';
@@ -72,6 +74,7 @@ import { ToAuthRow } from '@/typings/toauth';
 import { findLabel } from '@/utils';
 import { useEnumsDataStore } from '@/store';
 import { projectResource } from '@/api/project';
+import { SelectGroupOption, SelectOption } from 'naive-ui';
 interface Props {
   selectId: string | number;
 }
@@ -105,12 +108,6 @@ function showModal() {
 function getDetail() {
   toauthDetail(props.selectId).then((res) => {
     formModel.value = Object.assign(cloneDeep(defaultFormModel), res);
-    formModel.value.ProjectId = findLabel(
-      enums.resourceAllData,
-      formModel.value.ResourceId as string,
-      'ID',
-      'ProjectId'
-    );
     projectSelectUpdate(formModel.value.ProjectId as string);
   });
 }
@@ -145,6 +142,30 @@ function projectSelectUpdate(val: string) {
     console.log(res);
     ResourceList.value = res.data;
   });
+}
+function renderResourceOptionLabel(option: SelectOption): VNodeChild {
+  return [
+    h(
+      'span',
+      {},
+      {
+        default: () => `${option.ResourceName}【${option.ResourcePath}】`,
+      }
+    ),
+    option.label as string,
+  ];
+}
+function renderChannelOptionLabel(option: SelectOption): VNodeChild {
+  return [
+    h(
+      'span',
+      {},
+      {
+        default: () => `${option.AppName}【${option.AppKey}】`,
+      }
+    ),
+    option.label as string,
+  ];
 }
 </script>
 

@@ -84,81 +84,22 @@ const columnsFuc = ({
       key: 'AppId',
       render(row) {
         return [
-          h(
-            'div',
-            {},
-            findLabel(
-              enums.channelAllData,
-              row.AppId as string,
-              'ID',
-              'AppName'
-            )
-          ),
-          h(
-            'div',
-            {},
-            `【${findLabel(
-              enums.channelAllData,
-              row.AppId as string,
-              'ID',
-              'AppKey'
-            )}】`
-          ),
+          h('div', {}, `${row.AppName}`),
+          h('div', {}, `【${row.AppKey}】`),
         ];
       },
     },
     {
       title: '项目名称',
-      key: 'Prefix',
-      render(row) {
-        return h(
-          'span',
-          {},
-          findLabel(
-            enums.projectAllData,
-            findLabel(
-              enums.resourceAllData,
-              row.ResourceId as string,
-              'ID',
-              'ProjectId'
-            ),
-            'ID',
-            'ProjectName'
-          )
-        );
-      },
+      key: 'ProjectName',
     },
     {
       title: '资源名称',
-      key: 'ResourceId',
-      render(row) {
-        return h(
-          'span',
-          {},
-          findLabel(
-            enums.resourceAllData,
-            row.ResourceId as string,
-            'ID',
-            'ResourceName'
-          )
-        );
-      },
+      key: 'ResourceName',
     },
     {
       title: '资源路径',
-      key: 'Prefix',
-      render(row) {
-        return h(
-          'span',
-          {},
-          findLabel(
-            enums.resourceAllData,
-            row.ResourceId as string,
-            'ID',
-            'ResourcePath'
-          )
-        );
-      },
+      key: 'ResourcePath',
     },
     {
       title: '限流策略',

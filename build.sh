@@ -21,19 +21,17 @@ cp ${CONF_CFG} ${BUILD_DIR}/conf.cfg
 # docker-compose.yml
 sed "s|image_dest_replace|${IMAGE}:${VERSION}|" ./resources/docker-compose.yaml > ${BUILD_DIR}/docker-compose.yaml
 #install.sh
-# cp ./resources/install.sh ${BUILD_DIR}/install.sh
+cp ./resources/install.sh ${BUILD_DIR}/install.sh
 # conf dir
+
 mkdir -p ${CONF_DIR}
 cp ./src/config/prod.json ${CONF_DIR}/config.json
-sed -i "s|{{VERSION}}|${VERSION}|g" ${CONF_DIR}/config.json
 
 mkdir -p ${CONF_DIR}/conf.d
-echo ${CONF_DIR}
-cp ./resources/conf/conf.d/gateway-admin-web-v2.conf ${CONF_DIR}/gateway-admin-web-v2.conf
-# mkdir -p ${CONF_DIR}/config
-# cp ./resources/conf/config/application-pro.properties  ${CONF_DIR}/config/application-pro.properties
+cp ./resources/conf/conf.d/default.conf ${CONF_DIR}/conf.d/default.conf
 #END
 sed "s|image_dest_replace|${IMAGE}|" ./resources/skaffold.yaml > skaffold.yaml
+
 #create tar
 echo "3. create tar of build data"
 if [ ${BRANCH} != "dev" ]; then

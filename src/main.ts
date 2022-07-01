@@ -1,10 +1,10 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import { setupRouter } from './router';
-import { getConfig } from '@/config';
+import getConfig from '@/config';
 import { createPinia } from 'pinia';
 import '@/style/index.scss';
-(async function () {
+(async () => {
   const conf = await getConfig();
   // 挂载配置文件
   window.$conf = conf;

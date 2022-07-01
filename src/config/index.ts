@@ -4,12 +4,12 @@ import axios from 'axios';
  * @param {*}
  * @return 配置文件json
  */
-export async function getConfig() {
+export default async () => {
   if (process.env.NODE_ENV == 'development') {
     return require('./dev.json');
   } else {
-    await axios.get('/config.json').then((res) => {
+    return axios.get('/config.json').then((res) => {
       return res.data;
     });
   }
-}
+};

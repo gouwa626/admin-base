@@ -12,7 +12,7 @@ services:
     volumes:
       - ./conf:/etc/nginx/conf.d
       - ./conf/config.json:/opt/www/config.json
- gateway_admin_web_nginx:
+  gateway_admin_web_nginx:
     image: common/nginx:1.20
     container_name: gateway_admin_web_nginx
     restart: always

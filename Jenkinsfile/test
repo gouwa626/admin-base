@@ -1,0 +1,30 @@
+#!groovy
+
+// 在多分支构建下，严格规定Jenkinsfile只存在可以发版的分支上
+
+// 引用在jenkins已经全局定义好的library
+library 'ehl-pipeline-library'
+def map = [:]
+
+// 远程管理节点地址（用于执行发版）
+map.put('REMOTE_HOST',env.serviceIP)
+
+//远端执行目录，开发和测试必填，发版无效
+map.put('WORKDIR','/opt/')
+
+// 共享目录
+map.put('COPY_DIR','/home/seafile-sync/1-运营平台产品线/uc-用户管理中心/1-部署脚本')
+
+// 分支名称
+map.put('BRANCH_NAME','test')
+// 服务栈名称
+map.put('STACK_NAME','gateway-admin-web-v2')
+
+//镜像名称
+// map.put('IMAGE', '172.38.50.130/test/gateway-admin-web-v2')
+map.put('IMAGE', 'registry.ehualu.com/oc/gateway-admin-web-v2')
+//镜像版本号及Repository TAG
+map.put('VERSION','test')
+
+// 调用library中var目录下的build.groovy脚本
+test(map)

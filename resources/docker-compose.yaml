@@ -1,14 +1,26 @@
 version: '3'
 
 services:
-  admin_base:
-    image: image_admin_base
-    container_name: admin_base
+  gateway_admin_web_fe:
+    image: image_dest_replace
+    container_name: gateway_admin_web_v2
     restart: always
     ports:
-      - 8888:80
+      - 8188
     environment:
       - TZ=Asia/Shangha
     volumes:
       - ./conf:/etc/nginx/conf.d
       - ./conf/config.json:/opt/www/config.json
+ gateway_admin_web_nginx:
+    image: common/nginx:1.20
+    container_name: gateway_admin_web_nginx
+    restart: always
+    ports:
+      - 18088:80
+    volumes:
+      - ./conf/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - gateway_admin_web_fe
+    links:
+      - gateway_admin_web_fe:gateway_admin_web_v2

@@ -9,7 +9,7 @@ export function getConfig() {
     return require('./dev.json');
   } else {
     axios.get('/config.json').then((res) => {
-      return res;
+      return res.data;
     });
   }
 }

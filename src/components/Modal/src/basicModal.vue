@@ -45,7 +45,6 @@ import {
   useAttrs,
   defineEmits,
   defineProps,
-  watch,
 } from 'vue';
 import { basicProps } from './props';
 import startDrag from '@/utils/drag';

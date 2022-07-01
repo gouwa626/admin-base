@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { useModal } from '@/components/Modal';
 import basicModal from '@/components/Modal/src/basicModal.vue';
-import { nextTick, ref } from 'vue';
+import { ref } from 'vue';
 import { channelAdd, channelDetail, channelUpdate } from '@/api/channel';
 import { cloneDeep } from 'lodash';
 import { VerifyList, AppTypeList } from '@/mock/enums';

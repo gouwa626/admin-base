@@ -27,6 +27,7 @@ mkdir -p ${CONF_DIR}
 cp ./src/config/prod.json ${CONF_DIR}/config.json
 sed -i "s|{{VERSION}}|${VERSION}|g" ${CONF_DIR}/config.json
 
+mkdir -p ${CONF_DIR}/conf.d
 cp ./resources/conf/conf.d/gateway-admin-web-v2.conf ${CONF_DIR}/conf.d/gateway-admin-web-v2.conf
 # mkdir -p ${CONF_DIR}/config
 # cp ./resources/conf/config/application-pro.properties  ${CONF_DIR}/config/application-pro.properties

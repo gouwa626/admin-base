@@ -24,9 +24,9 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     // 关闭未声明，ts控制
     'no-undef': 'off',
-    //生命未使用-剔除函数
+    //声明未使用-剔除函数
     'no-unused-vars': [
-      'error',
+      'warning',
       { vars: 'all', args: 'none', ignoreRestSiblings: true },
     ],
   },

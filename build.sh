@@ -28,7 +28,7 @@ mkdir -p ${CONF_DIR}
 cp ./src/config/prod.json ${CONF_DIR}/config.json
 
 mkdir -p ${CONF_DIR}/conf.d
-cp ./resources/conf/conf.d/default.conf ${CONF_DIR}/conf.d/default.conf
+cp ./resources/conf/conf.d/default.conf ${CONF_DIR}/default.conf
 #END
 sed "s|image_dest_replace|${IMAGE}|" ./resources/skaffold.yaml > skaffold.yaml
 

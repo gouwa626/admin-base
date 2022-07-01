@@ -6,21 +6,9 @@ services:
     container_name: gateway_admin_web_v2
     restart: always
     ports:
-      - 8188
+      - 18088:80
     environment:
       - TZ=Asia/Shangha
     volumes:
       - ./conf:/etc/nginx/conf.d
       - ./conf/config.json:/opt/www/config.json
-  gateway_admin_web_nginx:
-    image: common/nginx:1.20
-    container_name: gateway_admin_web_nginx
-    restart: always
-    ports:
-      - 18088:80
-    volumes:
-      - ./conf/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - gateway_admin_web_fe
-    links:
-      - gateway_admin_web_fe:gateway_admin_web_v2

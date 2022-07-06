@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@vueuse/core": "^8.3.1",
+    "@vueuse/integrations": "^8.7.5",
     "axios": "^0.26.1",
     "core-js": "^3.22.2",
     "dayjs": "^1.11.1",
     "lodash-es": "^4.17.21",
     "pinia": "^2.0.13",
+    "universal-cookie": "^4.0.4",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14"
   },
@@ -30,6 +32,7 @@
     "@vue/cli-plugin-vuex": "~5.0.4",
     "@vue/cli-service": "~5.0.4",
     "@vue/eslint-config-typescript": "^10.0.0",
+    "colord": "^2.9.2",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",

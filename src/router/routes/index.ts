@@ -37,6 +37,11 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login/index.vue'),
+  },
+  {
     //匹配无效路由
     path: '/:pathMatch(.*)*',
     name: 'not-found-page',

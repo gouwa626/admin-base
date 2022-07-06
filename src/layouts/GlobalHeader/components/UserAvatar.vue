@@ -8,7 +8,10 @@
 </template>
 
 <script lang="ts" setup>
+import { loginOut } from '@/api/login';
 import { iconifyRender } from '@/utils';
+import { useCookies } from '@vueuse/integrations/useCookies';
+import { useRouter } from 'vue-router';
 
 type DropdownKey = 'user-center' | 'logout';
 
@@ -28,7 +31,8 @@ const options = [
     icon: iconifyRender('mdi:logout'),
   },
 ];
-
+const cookies = useCookies();
+const router = useRouter();
 function handleDropdown(optionKey: string) {
   const key = optionKey as DropdownKey;
 
@@ -39,7 +43,10 @@ function handleDropdown(optionKey: string) {
       positiveText: '确定',
       negativeText: '取消',
       onPositiveClick: () => {
-        console.log('登出');
+        loginOut().then(() => {
+          cookies.remove('token');
+          router.push('/login');
+        });
       },
     });
   }

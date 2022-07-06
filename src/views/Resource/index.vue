@@ -124,7 +124,7 @@ const columnsFuc = ({
     },
     {
       title: '备注',
-      key: 'ProjectMemo',
+      key: 'ResourceMemo',
     },
     {
       title: '修改时间',

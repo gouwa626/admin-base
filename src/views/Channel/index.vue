@@ -51,6 +51,7 @@ import dayjs from 'dayjs';
 import { ChannelRow } from '@/typings/channel';
 import { findLabel } from '@/utils';
 import { AppTypeList, VerifyList } from '@/mock/enums';
+import { useEnumsDataStore } from '@/store';
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
   user: {
@@ -207,6 +208,7 @@ function handleDel(row: ChannelRow) {
 // 新建｜编辑处理
 const selectId = ref('');
 const dialogRef = ref();
+const enums = useEnumsDataStore();
 function handleAdd() {
   selectId.value = '';
   nextTick(() => {
@@ -215,6 +217,7 @@ function handleAdd() {
 }
 function updateAdd() {
   getList();
-  console.log();
+  //更新渠道list
+  enums.setChanelAllData();
 }
 </script>

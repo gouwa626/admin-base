@@ -51,6 +51,7 @@ import dayjs from 'dayjs';
 import { ProjectRow } from '@/typings/project';
 import { findLabel } from '@/utils';
 import { AppTypeList, VerifyList } from '@/mock/enums';
+import { useEnumsDataStore } from '@/store';
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
   user: {
@@ -201,6 +202,7 @@ function handleDel(row: ProjectRow) {
 // 新建｜编辑处理
 const selectId = ref('');
 const dialogRef = ref();
+const enums = useEnumsDataStore();
 function handleAdd() {
   selectId.value = '';
   nextTick(() => {
@@ -209,6 +211,7 @@ function handleAdd() {
 }
 function updateAdd() {
   getList();
-  console.log();
+  // 更新全部项目list
+  enums.setProjectAllData();
 }
 </script>

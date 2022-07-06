@@ -122,7 +122,7 @@ const modelTitle = ref('新建');
 const enums = useEnumsDataStore();
 let [addmodelRegister, { openModal, closeModal: close }] = useModal({
   closable: true,
-  width: 600,
+  width: 620,
 });
 function showModal() {
   formModel.value = Object.assign(cloneDeep(defaultFormModel));
@@ -140,7 +140,6 @@ function getDetail() {
   });
 }
 function closeModal() {
-  formModel;
   close();
 }
 function handleClickSubmit() {

@@ -64,7 +64,6 @@ function handleValidateClick() {
   pagination.page = 1;
   getList();
 }
-const enums = useEnumsDataStore();
 // 表格相关
 const rowKey = (rowData: ResourceRow) => rowData.ID as string;
 const columnsFuc = ({
@@ -230,6 +229,7 @@ function handleDel(row: ResourceRow) {
 // 新建｜编辑处理
 const selectId = ref('');
 const dialogRef = ref();
+const enums = useEnumsDataStore();
 function handleAdd() {
   selectId.value = '';
   nextTick(() => {
@@ -238,6 +238,7 @@ function handleAdd() {
 }
 function updateAdd() {
   getList();
-  console.log();
+  // 更新全部资源list
+  enums.setResourceAllData();
 }
 </script>

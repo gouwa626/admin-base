@@ -112,7 +112,6 @@ function getDetail() {
   });
 }
 function closeModal() {
-  formModel;
   close();
 }
 function handleClickSubmit() {

@@ -25,7 +25,10 @@
   </n-space>
   <n-divider /> -->
   <n-space vertical :size="12">
-    <n-button type="primary" @click="handleAdd">新建渠道</n-button>
+    <n-space>
+      <n-button type="primary" @click="handleSearch">查询</n-button>
+      <n-button type="primary" @click="handleAdd">新建渠道</n-button>
+    </n-space>
     <n-data-table
       remote
       size="small"
@@ -163,12 +166,16 @@ const pagination = reactive<PaginationInfo>({
 });
 function getList() {
   loading.value = true;
-  channelList(pagination).then((res) => {
-    console.log(res);
-    data.value = res.data;
-    pagination.itemCount = res.count;
-    loading.value = false;
-  });
+  channelList(pagination)
+    .then((res) => {
+      console.log(res);
+      data.value = res.data;
+      pagination.itemCount = res.count;
+      loading.value = false;
+    })
+    .catch(() => {
+      loading.value = false;
+    });
 }
 getList();
 function getData(page: number) {
@@ -204,7 +211,10 @@ function handleDel(row: ChannelRow) {
     },
   });
 }
-
+function handleSearch() {
+  pagination.page = 1;
+  getList();
+}
 // 新建｜编辑处理
 const selectId = ref('');
 const dialogRef = ref();

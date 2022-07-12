@@ -76,10 +76,11 @@ const props = defineProps<Props>();
 const emit = defineEmits(['submit', 'register']);
 const formModel = ref(cloneDeep(defaultFormModel));
 const modelTitle = ref('新建');
-let [addmodelRegister, { openModal, closeModal: close }] = useModal({
-  closable: true,
-  width: 600,
-});
+let [addmodelRegister, { openModal, closeModal: close, setSubLoading }] =
+  useModal({
+    closable: true,
+    width: 600,
+  });
 function showModal() {
   formModel.value = Object.assign(cloneDeep(defaultFormModel));
   formModel.value.AppSecret = randomString();
@@ -102,17 +103,25 @@ function closeModal() {
 }
 function handleClickSubmit() {
   if (formModel.value.ID) {
-    channelUpdate(formModel.value).then(() => {
-      emit('submit', formModel.value);
-      window.$message.success('编辑成功');
-      close();
-    });
+    channelUpdate(formModel.value)
+      .then(() => {
+        emit('submit', formModel.value);
+        window.$message.success('编辑成功');
+        close();
+      })
+      .catch(() => {
+        setSubLoading(false);
+      });
   } else {
-    channelAdd(formModel.value).then(() => {
-      emit('submit', formModel.value);
-      window.$message.success('添加成功');
-      close();
-    });
+    channelAdd(formModel.value)
+      .then(() => {
+        emit('submit', formModel.value);
+        window.$message.success('添加成功');
+        close();
+      })
+      .catch(() => {
+        setSubLoading(false);
+      });
   }
 }
 defineExpose({ showModal });

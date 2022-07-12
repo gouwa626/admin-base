@@ -91,10 +91,11 @@ const emit = defineEmits(['submit', 'register']);
 const formModel = ref(cloneDeep(defaultFormModel));
 const modelTitle = ref('新建');
 const enums = useEnumsDataStore();
-let [addmodelRegister, { openModal, closeModal: close }] = useModal({
-  closable: true,
-  width: 600,
-});
+let [addmodelRegister, { openModal, closeModal: close, setSubLoading }] =
+  useModal({
+    closable: true,
+    width: 600,
+  });
 function showModal() {
   formModel.value = Object.assign(cloneDeep(defaultFormModel));
   modelTitle.value = `${props.selectId ? '编辑' : '新建'}资源授权`;
@@ -116,17 +117,25 @@ function closeModal() {
 }
 function handleClickSubmit() {
   if (formModel.value.ID) {
-    toauthUpdate(formModel.value).then(() => {
-      emit('submit', formModel.value);
-      window.$message.success('编辑成功');
-      close();
-    });
+    toauthUpdate(formModel.value)
+      .then(() => {
+        emit('submit', formModel.value);
+        window.$message.success('编辑成功');
+        close();
+      })
+      .catch(() => {
+        setSubLoading(false);
+      });
   } else {
-    toauthAdd(formModel.value).then(() => {
-      emit('submit', formModel.value);
-      window.$message.success('添加成功');
-      close();
-    });
+    toauthAdd(formModel.value)
+      .then(() => {
+        emit('submit', formModel.value);
+        window.$message.success('添加成功');
+        close();
+      })
+      .catch(() => {
+        setSubLoading(false);
+      });
   }
 }
 defineExpose({ showModal });

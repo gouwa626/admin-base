@@ -1,16 +1,8 @@
 <template>
   <div class="home flex-y-center flex-direction-column">
     <n-space style="width: 290px">
-      <n-gradient-text
-        gradient="linear-gradient(90deg, #FFCF71 0%, #2376DD 100%)"
-        size="18"
-      >
-        系统时间：
-      </n-gradient-text>
-      <n-gradient-text
-        gradient="linear-gradient(90deg, #F6D242 0%, #FF52E5 100%)"
-        size="18"
-      >
+      <n-gradient-text type="success" size="18"> 系统时间： </n-gradient-text>
+      <n-gradient-text size="18">
         {{ nowTime }}
       </n-gradient-text>
     </n-space>

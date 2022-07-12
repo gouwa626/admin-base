@@ -188,7 +188,6 @@ function getList() {
   loading.value = true;
   resourceList(pagination)
     .then((res) => {
-      console.log(res);
       data.value = res.data;
       pagination.itemCount = res.count;
       loading.value = false;

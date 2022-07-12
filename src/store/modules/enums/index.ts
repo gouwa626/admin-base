@@ -19,9 +19,12 @@ export const useEnumsDataStore = defineStore('enums-store', {
         endIndex: 1,
         itemCount: 1,
         pageCount: 1,
-      }).then((res) => {
-        this.channelAllData = res.data;
-      });
+      })
+        .then((res) => {
+          this.channelAllData = res.data;
+        })
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        .catch(() => {});
     },
     setProjectAllData() {
       projectList({
@@ -31,9 +34,12 @@ export const useEnumsDataStore = defineStore('enums-store', {
         endIndex: 1,
         itemCount: 1,
         pageCount: 1,
-      }).then((res) => {
-        this.projectAllData = res.data;
-      });
+      })
+        .then((res) => {
+          this.projectAllData = res.data;
+        })
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        .catch(() => {});
     },
     setResourceAllData() {
       resourceList({
@@ -43,9 +49,12 @@ export const useEnumsDataStore = defineStore('enums-store', {
         endIndex: 1,
         itemCount: 1,
         pageCount: 1,
-      }).then((res) => {
-        this.resourceAllData = res.data;
-      });
+      })
+        .then((res) => {
+          this.resourceAllData = res.data;
+        })
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        .catch(() => {});
     },
     setEnumsDataData() {
       this.setChanelAllData();

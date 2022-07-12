@@ -180,7 +180,6 @@ function getList() {
   loading.value = true;
   toauthList(pagination)
     .then((res) => {
-      console.log(res);
       data.value = res.data;
       pagination.itemCount = res.count;
       loading.value = false;

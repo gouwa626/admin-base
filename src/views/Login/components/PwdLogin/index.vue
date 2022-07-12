@@ -69,7 +69,6 @@ function handleSubmit(e: MouseEvent) {
       loading.value = true;
       loginIn(model)
         .then((res) => {
-          loading.value = false;
           cookies.set('token', res);
           if (rememberMe.value) {
             cookies.set('userName', model.userName);
@@ -79,6 +78,7 @@ function handleSubmit(e: MouseEvent) {
             cookies.remove('password');
           }
           setTimeout(() => {
+            loading.value = false;
             router.push('/home');
           }, 500);
         })

@@ -161,7 +161,6 @@ function getList() {
   loading.value = true;
   projectList(pagination)
     .then((res) => {
-      console.log(res);
       data.value = res.data;
       pagination.itemCount = res.count;
       loading.value = false;

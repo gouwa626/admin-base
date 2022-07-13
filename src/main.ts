@@ -4,10 +4,12 @@ import { setupRouter } from './router';
 import { getConfig } from '@/config';
 import { createPinia } from 'pinia';
 import '@/style/index.scss';
-(async function () {
-  const conf = await getConfig();
+import { importSvgIcons } from '@/utils/icon';
+
+importSvgIcons();
+(async () => {
   // 挂载配置文件
-  window.$conf = conf;
+  window.$conf = await getConfig();
   // 创建app
   const app = createApp(App);
   // 设置路由

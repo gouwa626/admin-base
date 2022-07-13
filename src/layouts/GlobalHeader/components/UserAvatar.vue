@@ -8,7 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-import { iconifyRender } from '@/utils';
+import { loginOut } from '@/api/login';
+import { customIconRender, iconifyRender } from '@/utils';
+import { useCookies } from '@vueuse/integrations/useCookies';
+import { useRouter } from 'vue-router';
 
 type DropdownKey = 'user-center' | 'logout';
 
@@ -16,7 +19,7 @@ const options = [
   {
     label: '用户中心',
     key: 'user-center',
-    icon: iconifyRender('mdi:account-circle-outline'),
+    icon: customIconRender('MdiAccountCircleOutline'),
   },
   {
     type: 'divider',
@@ -25,10 +28,11 @@ const options = [
   {
     label: '退出登录',
     key: 'logout',
-    icon: iconifyRender('mdi:logout'),
+    icon: customIconRender('MdiLogout'),
   },
 ];
-
+const cookies = useCookies();
+const router = useRouter();
 function handleDropdown(optionKey: string) {
   const key = optionKey as DropdownKey;
 
@@ -39,7 +43,15 @@ function handleDropdown(optionKey: string) {
       positiveText: '确定',
       negativeText: '取消',
       onPositiveClick: () => {
-        console.log('登出');
+        loginOut()
+          .then(() => {
+            cookies.remove('token');
+            router.push('/login');
+          })
+          .catch(() => {
+            cookies.remove('token');
+            router.push('/login');
+          });
       },
     });
   }

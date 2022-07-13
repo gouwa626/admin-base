@@ -9,10 +9,12 @@
 </template>
 
 <script setup lang="ts">
+// import SvgIcon from '@/components/custom/SvgIcon.vue';
+// import '@/assets/svg/MdiHome.svg';
 import { computed, h } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { useRouteStore, useThemeStore } from '@/store';
-import { iconifyRender } from '@/utils';
+import { customIconRender } from '@/utils';
 import type { MenuOption } from 'naive-ui';
 const theme = useThemeStore();
 const routeStore = useRouteStore();
@@ -41,7 +43,7 @@ function setRouterTree(routers: Route.RouterInfo[]): MenuOption[] {
           : item.nodeName,
       key: item.nodeId,
       children: [],
-      icon: item.icon ? iconifyRender(item.icon) : () => '',
+      icon: item.icon ? customIconRender(item.icon) : () => '',
     };
     if (item.children && item.children.length) {
       temp.children = setRouterTree(item.children);

@@ -11,12 +11,20 @@
           :render-icon="renderIcon"
         >
           <span>
-            <Icon v-if="breadcrumb.icon" :icon="breadcrumb.icon" class="breadcrumb-icon" />
+            <svg-icon
+              v-if="breadcrumb.icon"
+              :icon="breadcrumb.icon"
+              class="breadcrumb-icon"
+            ></svg-icon>
             <span>{{ breadcrumb.nodeName }}</span>
           </span>
         </n-dropdown>
         <template v-else>
-          <Icon v-if="breadcrumb.icon" :icon="breadcrumb.icon" class="breadcrumb-icon" />
+          <svg-icon
+            v-if="breadcrumb.icon"
+            :icon="breadcrumb.icon"
+            class="breadcrumb-icon"
+          ></svg-icon>
           <span>{{ breadcrumb.nodeName }}</span>
         </template>
       </n-breadcrumb-item>
@@ -30,17 +38,19 @@ import { useRoute, useRouter } from 'vue-router';
 import type { DropdownOption } from 'naive-ui';
 import { cloneDeep } from 'lodash';
 import { useRouteStore } from '@/store';
-import { Icon } from '@iconify/vue';
-import { iconifyRender } from '@/utils';
+import { customIconRender } from '@/utils';
 
 const route = useRoute();
 const router = useRouter();
 const routeStore = useRouteStore();
 // 处理下拉菜单的icon
 function renderIcon(option: DropdownOption) {
-  return iconifyRender((option.icon || '') as string)();
+  return customIconRender((option.icon || '') as string)();
 }
-const breadcrumbs = computed(() => setBreadcrumbs(cloneDeep(routeStore.routerInfos), route.path));
+
+const breadcrumbs = computed(() =>
+  setBreadcrumbs(cloneDeep(routeStore.routerInfos), route.path)
+);
 // 根据路由生成面包屑数据
 function setBreadcrumbs(arr: any, path: string): GlobalBreadcrumb[] {
   let res: GlobalBreadcrumb[] = [];
@@ -56,9 +66,15 @@ function setBreadcrumbs(arr: any, path: string): GlobalBreadcrumb[] {
       return res;
     }
     if (arr[i].children && arr[i].children?.length) {
-      let childRes = setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path);
+      let childRes = setBreadcrumbs(
+        arr[i].children as GlobalBreadcrumb[],
+        path
+      );
       if (childRes && childRes.length) {
-        res.push(arr[i], ...setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path));
+        res.push(
+          arr[i],
+          ...setBreadcrumbs(arr[i].children as GlobalBreadcrumb[], path)
+        );
         return res;
       }
     }

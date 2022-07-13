@@ -11,20 +11,20 @@
           :render-icon="renderIcon"
         >
           <span>
-            <Icon
+            <svg-icon
               v-if="breadcrumb.icon"
               :icon="breadcrumb.icon"
               class="breadcrumb-icon"
-            />
+            ></svg-icon>
             <span>{{ breadcrumb.nodeName }}</span>
           </span>
         </n-dropdown>
         <template v-else>
-          <Icon
+          <svg-icon
             v-if="breadcrumb.icon"
             :icon="breadcrumb.icon"
             class="breadcrumb-icon"
-          />
+          ></svg-icon>
           <span>{{ breadcrumb.nodeName }}</span>
         </template>
       </n-breadcrumb-item>
@@ -38,16 +38,16 @@ import { useRoute, useRouter } from 'vue-router';
 import type { DropdownOption } from 'naive-ui';
 import { cloneDeep } from 'lodash';
 import { useRouteStore } from '@/store';
-import { Icon } from '@iconify/vue';
-import { iconifyRender } from '@/utils';
+import { customIconRender } from '@/utils';
 
 const route = useRoute();
 const router = useRouter();
 const routeStore = useRouteStore();
 // 处理下拉菜单的icon
 function renderIcon(option: DropdownOption) {
-  return iconifyRender((option.icon || '') as string)();
+  return customIconRender((option.icon || '') as string)();
 }
+
 const breadcrumbs = computed(() =>
   setBreadcrumbs(cloneDeep(routeStore.routerInfos), route.path)
 );

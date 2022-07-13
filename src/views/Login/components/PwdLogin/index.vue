@@ -69,18 +69,20 @@ function handleSubmit(e: MouseEvent) {
       loading.value = true;
       loginIn(model)
         .then((res) => {
-          cookies.set('token', res);
-          if (rememberMe.value) {
-            cookies.set('userName', model.userName);
-            cookies.set('password', model.password);
-          } else {
-            cookies.remove('userName');
-            cookies.remove('password');
+          if (res) {
+            cookies.set('token', res);
+            if (rememberMe.value) {
+              cookies.set('userName', model.userName);
+              cookies.set('password', model.password);
+            } else {
+              cookies.remove('userName');
+              cookies.remove('password');
+            }
+            setTimeout(() => {
+              loading.value = false;
+              router.push('/home');
+            }, 500);
           }
-          setTimeout(() => {
-            loading.value = false;
-            router.push('/home');
-          }, 500);
         })
         .catch((err) => {
           loading.value = false;

@@ -4,6 +4,8 @@ import { setupRouter } from './router';
 import getConfig from '@/config';
 import { createPinia } from 'pinia';
 import '@/style/index.scss';
+import { importSvgIcons } from '@/utils/icon';
+importSvgIcons();
 (async () => {
   const conf = await getConfig();
   // 挂载配置文件

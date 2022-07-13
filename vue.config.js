@@ -5,14 +5,43 @@ const Icons = require('unplugin-icons/webpack');
 const IconsResolver = require('unplugin-icons/resolver');
 const { FileSystemIconLoader } = require('unplugin-icons/loaders');
 const GenerateAssetWebpackPluginForWebpack5 = require('generate-asset-webpack-plugin-forwebpack5');
+const path = require('path');
 // build时构建配置文件
 const configJson = require('./src/config/prod.json');
+function resolve(dir) {
+  return path.join(__dirname, dir);
+}
 module.exports = defineConfig({
   chainWebpack: (config) => {
     config.plugin('html').tap((args) => {
       args[0].title = '网关管理系统';
       return args;
     });
+    config.module.rules.delete('svg'); // 删除默认svg配置
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('src/assets/svg'))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: 'icon-custom-[name]',
+      })
+      .end()
+      .use('svgo-loader')
+      .loader('svgo-loader')
+      .options({
+        plugins: [
+          {
+            name: 'removeAttrs',
+            params: {
+              attrs: '(fill|stroke)',
+            },
+          },
+        ],
+      })
+      .end();
   },
   css: {
     loaderOptions: {

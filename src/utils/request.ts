@@ -35,6 +35,7 @@ request.interceptors.response.use(
   (error) => {
     window.$message.error('系统错误');
     console.log(error);
+    return Promise.reject(error);
   }
 );
 export default request;

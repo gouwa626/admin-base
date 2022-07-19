@@ -53,7 +53,7 @@ import Dialog from './components/Dialog.vue';
 import dayjs from 'dayjs';
 import { ProjectRow } from '@/typings/project';
 import { findLabel } from '@/utils';
-import { AppTypeList, VerifyList } from '@/mock/enums';
+import { ProjectTypeList, VerifyList } from '@/mock/enums';
 import { useEnumsDataStore } from '@/store';
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
@@ -93,7 +93,7 @@ const columnsFuc = ({
       title: '项目类型',
       key: 'ProjectType',
       render(row) {
-        return h('span', {}, findLabel(AppTypeList, row.ProjectType));
+        return h('span', {}, findLabel(ProjectTypeList, row.ProjectType));
       },
     },
     {

@@ -53,7 +53,7 @@ import Dialog from './components/Dialog.vue';
 import dayjs from 'dayjs';
 import { ResourceRow } from '@/typings/resource';
 import { findLabel } from '@/utils';
-import { AppTypeList, VerifyList } from '@/mock/enums';
+import { AppTypeList, VerifyList, VerifyLoginList } from '@/mock/enums';
 import { useEnumsDataStore } from '@/store';
 const formRef = ref<FormInst | null>(null);
 const formValue = ref({
@@ -110,8 +110,18 @@ const columnsFuc = ({
       key: 'SortWeight',
     },
     {
-      title: '验签类型',
-      key: 'ResourcePath',
+      title: '验证类型',
+      key: 'VerifyType',
+      render(row) {
+        return h('span', {}, findLabel(VerifyList, row.VerifyType));
+      },
+    },
+    {
+      title: '登录验证',
+      key: 'VerifyLogin',
+      render(row) {
+        return h('span', {}, findLabel(VerifyLoginList, row.VerifyLogin));
+      },
     },
     {
       title: '超时时间',

@@ -5,7 +5,14 @@
     :title="modelTitle"
   >
     <div class="form-warper">
-      <n-form :model="formModel" label-placement="left" label-width="80px">
+      <n-form
+        :model="formModel"
+        :rules="rules"
+        ref="formRef"
+        label-placement="left"
+        label-width="80px"
+        require-mark-placement="left"
+      >
         <n-form-item label="渠道名称" path="AppName">
           <n-input
             v-model:value="formModel.AppName"
@@ -13,10 +20,15 @@
           />
         </n-form-item>
         <n-form-item label="AppKey" path="AppKey">
-          <n-input
-            v-model:value="formModel.AppKey"
-            placeholder="请输入AppKey"
-          />
+          <n-popover placement="right">
+            <template #trigger>
+              <n-input
+                v-model:value="formModel.AppKey"
+                placeholder="请输入AppKey"
+              />
+            </template>
+            <span>示例：S-01001；不可重复！</span>
+          </n-popover>
         </n-form-item>
         <n-form-item label="密钥" path="AppSecret">
           <n-input
@@ -59,6 +71,7 @@ import { cloneDeep } from 'lodash';
 import { VerifyList, AppTypeList } from '@/mock/enums';
 import { ChannelRow } from '@/typings/channel';
 import { randomString } from '@/utils';
+import { FormInst } from 'naive-ui';
 interface Props {
   selectId: string | number;
 }
@@ -75,6 +88,25 @@ const defaultFormModel: ChannelRow = {
 const props = defineProps<Props>();
 const emit = defineEmits(['submit', 'register']);
 const formModel = ref(cloneDeep(defaultFormModel));
+const formRef = ref<FormInst | null>(null);
+const rules = {
+  AppKey: {
+    required: true,
+    message: '请输入AppKey',
+  },
+  AppName: {
+    required: true,
+    message: '请输入AppName',
+  },
+  AppType: {
+    required: true,
+    message: '请选择渠道类型',
+  },
+  AppSecret: {
+    required: true,
+    message: '请输入密钥',
+  },
+};
 const modelTitle = ref('新建');
 let [addmodelRegister, { openModal, closeModal: close, setSubLoading }] =
   useModal({
@@ -102,27 +134,33 @@ function closeModal() {
   close();
 }
 function handleClickSubmit() {
-  if (formModel.value.ID) {
-    channelUpdate(formModel.value)
-      .then(() => {
-        emit('submit', formModel.value);
-        window.$message.success('编辑成功');
-        close();
-      })
-      .catch(() => {
-        setSubLoading(false);
-      });
-  } else {
-    channelAdd(formModel.value)
-      .then(() => {
-        emit('submit', formModel.value);
-        window.$message.success('添加成功');
-        close();
-      })
-      .catch(() => {
-        setSubLoading(false);
-      });
-  }
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      if (formModel.value.ID) {
+        channelUpdate(formModel.value)
+          .then(() => {
+            emit('submit', formModel.value);
+            window.$message.success('编辑成功');
+            close();
+          })
+          .catch(() => {
+            setSubLoading(false);
+          });
+      } else {
+        channelAdd(formModel.value)
+          .then(() => {
+            emit('submit', formModel.value);
+            window.$message.success('添加成功');
+            close();
+          })
+          .catch(() => {
+            setSubLoading(false);
+          });
+      }
+    } else {
+      setSubLoading(false);
+    }
+  });
 }
 defineExpose({ showModal });
 </script>

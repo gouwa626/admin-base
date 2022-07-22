@@ -5,7 +5,13 @@
     :title="modelTitle"
   >
     <div class="form-warper">
-      <n-form :model="formModel" label-placement="left" label-width="80px">
+      <n-form
+        :model="formModel"
+        label-placement="left"
+        label-width="80px"
+        :rules="rules"
+        ref="formRef"
+      >
         <n-form-item label="项目名称" path="ProjectName">
           <n-input
             v-model:value="formModel.ProjectName"
@@ -13,16 +19,26 @@
           />
         </n-form-item>
         <n-form-item label="项目前缀" path="Prefix">
-          <n-input
-            v-model:value="formModel.Prefix"
-            placeholder="请输入项目前缀"
-          />
+          <n-popover placement="right">
+            <template #trigger>
+              <n-input
+                v-model:value="formModel.Prefix"
+                placeholder="请输入项目前缀"
+              />
+            </template>
+            <span>示例：/usercenterservice</span>
+          </n-popover>
         </n-form-item>
         <n-form-item label="访问地址" path="ProjectPath">
-          <n-input
-            v-model:value="formModel.ProjectPath"
-            placeholder="请输入访问地址"
-          />
+          <n-popover placement="right">
+            <template #trigger>
+              <n-input
+                v-model:value="formModel.ProjectPath"
+                placeholder="请输入访问地址"
+              />
+            </template>
+            <span>示例：http://172.38.40.246:9093</span>
+          </n-popover>
         </n-form-item>
         <n-form-item label="项目类型" path="ProjectType">
           <n-select
@@ -52,6 +68,7 @@ import { cloneDeep } from 'lodash';
 import { ProjectTypeList } from '@/mock/enums';
 import { ProjectRow } from '@/typings/project';
 import { randomString } from '@/utils';
+import { FormInst } from 'naive-ui';
 interface Props {
   selectId: string | number;
 }
@@ -65,7 +82,22 @@ const defaultFormModel: ProjectRow = {
 const props = defineProps<Props>();
 const emit = defineEmits(['submit', 'register']);
 const formModel = ref(cloneDeep(defaultFormModel));
+const formRef = ref<FormInst | null>(null);
 const modelTitle = ref('新建');
+const rules = {
+  Prefix: {
+    required: true,
+    message: '请输入项目前缀',
+  },
+  ProjectName: {
+    required: true,
+    message: '请输入项目名称',
+  },
+  ProjectPath: {
+    required: true,
+    message: '请输入访问地址',
+  },
+};
 let [addmodelRegister, { openModal, closeModal: close, setSubLoading }] =
   useModal({
     closable: true,
@@ -91,27 +123,33 @@ function closeModal() {
   close();
 }
 function handleClickSubmit() {
-  if (formModel.value.ID) {
-    projectUpdate(formModel.value)
-      .then(() => {
-        emit('submit', formModel.value);
-        window.$message.success('编辑成功');
-        close();
-      })
-      .catch(() => {
-        setSubLoading(false);
-      });
-  } else {
-    projectAdd(formModel.value)
-      .then(() => {
-        emit('submit', formModel.value);
-        window.$message.success('添加成功');
-        close();
-      })
-      .catch(() => {
-        setSubLoading(false);
-      });
-  }
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      if (formModel.value.ID) {
+        projectUpdate(formModel.value)
+          .then(() => {
+            emit('submit', formModel.value);
+            window.$message.success('编辑成功');
+            close();
+          })
+          .catch(() => {
+            setSubLoading(false);
+          });
+      } else {
+        projectAdd(formModel.value)
+          .then(() => {
+            emit('submit', formModel.value);
+            window.$message.success('添加成功');
+            close();
+          })
+          .catch(() => {
+            setSubLoading(false);
+          });
+      }
+    } else {
+      setSubLoading(false);
+    }
+  });
 }
 defineExpose({ showModal });
 </script>

@@ -5,7 +5,13 @@
     :title="modelTitle"
   >
     <div class="form-warper">
-      <n-form :model="formModel" label-placement="left" label-width="80px">
+      <n-form
+        :model="formModel"
+        label-placement="left"
+        label-width="80px"
+        :rules="rules"
+        ref="formRef"
+      >
         <n-form-item label="所属项目" path="ProjectId">
           <n-select
             v-model:value="formModel.ProjectId"
@@ -38,11 +44,19 @@
           />
         </n-form-item>
         <n-form-item label="限流策略" path="LimitConfig">
-          <n-input
-            v-model:value="formModel.LimitConfig"
-            type="textarea"
-            placeholder="请输入限流策略"
-          />
+          <n-popover placement="right">
+            <template #trigger>
+              <n-input
+                v-model:value="formModel.LimitConfig"
+                type="textarea"
+                placeholder="请输入限流策略"
+              />
+            </template>
+            <span
+              >json格式<br />示例：{"name": "brett", "country":
+              "Australia"}</span
+            >
+          </n-popover>
         </n-form-item>
         <n-form-item label="备注" path="AuthorizationMemo">
           <n-input
@@ -74,7 +88,7 @@ import { ToAuthRow } from '@/typings/toauth';
 import { findLabel } from '@/utils';
 import { useEnumsDataStore } from '@/store';
 import { projectResource } from '@/api/project';
-import { SelectGroupOption, SelectOption } from 'naive-ui';
+import { FormInst, SelectGroupOption, SelectOption } from 'naive-ui';
 interface Props {
   selectId: string | number;
 }
@@ -89,6 +103,21 @@ const defaultFormModel: ToAuthRow = {
 const props = defineProps<Props>();
 const emit = defineEmits(['submit', 'register']);
 const formModel = ref(cloneDeep(defaultFormModel));
+const formRef = ref<FormInst | null>(null);
+const rules = {
+  ProjectId: {
+    required: true,
+    message: '请选择所属项目',
+  },
+  AppId: {
+    required: true,
+    message: '请选择分配渠道',
+  },
+  ResourceId: {
+    required: true,
+    message: '请选择分配资源',
+  },
+};
 const modelTitle = ref('新建');
 const enums = useEnumsDataStore();
 let [addmodelRegister, { openModal, closeModal: close, setSubLoading }] =
@@ -116,27 +145,33 @@ function closeModal() {
   close();
 }
 function handleClickSubmit() {
-  if (formModel.value.ID) {
-    toauthUpdate(formModel.value)
-      .then(() => {
-        emit('submit', formModel.value);
-        window.$message.success('编辑成功');
-        close();
-      })
-      .catch(() => {
-        setSubLoading(false);
-      });
-  } else {
-    toauthAdd(formModel.value)
-      .then(() => {
-        emit('submit', formModel.value);
-        window.$message.success('添加成功');
-        close();
-      })
-      .catch(() => {
-        setSubLoading(false);
-      });
-  }
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      if (formModel.value.ID) {
+        toauthUpdate(formModel.value)
+          .then(() => {
+            emit('submit', formModel.value);
+            window.$message.success('编辑成功');
+            close();
+          })
+          .catch(() => {
+            setSubLoading(false);
+          });
+      } else {
+        toauthAdd(formModel.value)
+          .then(() => {
+            emit('submit', formModel.value);
+            window.$message.success('添加成功');
+            close();
+          })
+          .catch(() => {
+            setSubLoading(false);
+          });
+      }
+    } else {
+      setSubLoading(false);
+    }
+  });
 }
 defineExpose({ showModal });
 const ResourceList = ref([]);

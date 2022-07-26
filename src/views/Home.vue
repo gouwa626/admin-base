@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <n-button type="primary" @click="router.push('/table')"> 去看看表格 </n-button>
+    <n-button type="primary" @click="router.push('/table')">
+      去看看表格
+    </n-button>
   </div>
 </template>
 

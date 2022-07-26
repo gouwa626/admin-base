@@ -54,7 +54,11 @@ function setRouterTree(routers: Route.RouterInfo[]): MenuOption[] {
   return arr;
 }
 // 查找当前路由
-function findRouteInfo(arr: Route.RouterInfo[], key: string, findKey: string | number): any {
+function findRouteInfo(
+  arr: Route.RouterInfo[],
+  key: string,
+  findKey: string | number
+): any {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i][key as keyof Route.RouterInfo] == findKey) {
       return arr[i];

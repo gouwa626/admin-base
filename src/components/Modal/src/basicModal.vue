@@ -7,7 +7,11 @@
     :style="`width:${getBindValue.width}px`"
   >
     <template #header>
-      <div class="w-full" id="basic-modal-bar" :class="needDrag && 'cursor-move'">
+      <div
+        class="w-full"
+        id="basic-modal-bar"
+        :class="needDrag && 'cursor-move'"
+      >
         <slot name="title" v-if="$slots.title"></slot>
         <div class="wh-full" v-else>{{ getBindValue.title }}</div>
       </div>

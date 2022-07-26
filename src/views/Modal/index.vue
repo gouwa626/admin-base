@@ -43,7 +43,11 @@ const [modalRegister, { openModal, closeModal, setSubLoading }] = useModal({
 
 const [
   lightModalRegister,
-  { openModal: lightOpenModal, closeModal: lightCloseModal, setSubLoading: lightSetSubLoading },
+  {
+    openModal: lightOpenModal,
+    closeModal: lightCloseModal,
+    setSubLoading: lightSetSubLoading,
+  },
 ] = useModal({
   title: '我不需要移动',
   showIcon: false,

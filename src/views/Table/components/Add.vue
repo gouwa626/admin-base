@@ -1,5 +1,9 @@
 <template>
-  <basic-modal @register="addmodelRegister" @on-sub="handleClickSubmit" :title="modelTitle">
+  <basic-modal
+    @register="addmodelRegister"
+    @on-sub="handleClickSubmit"
+    :title="modelTitle"
+  >
     <div class="form-warper">
       <n-form :model="formModel" label-placement="left" label-width="80px">
         <n-form-item label="姓名" path="name">
@@ -55,10 +59,12 @@ function handleClickSubmit() {
 defineExpose({ showModal });
 
 let formModel = ref<Recordable>({});
-const generalOptions = ['groode', 'veli good', 'emazing', 'lidiculous'].map((v) => ({
-  label: v,
-  value: v,
-}));
+const generalOptions = ['groode', 'veli good', 'emazing', 'lidiculous'].map(
+  (v) => ({
+    label: v,
+    value: v,
+  })
+);
 </script>
 
 <style scoped lang="scss">

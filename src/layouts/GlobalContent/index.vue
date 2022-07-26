@@ -3,7 +3,11 @@
     class="global-content"
     :style="[
       `padding-left:${
-        isVertical ? (isCollapse ? theme.siderNormalWidth + 20 : theme.siderCollapseWidth + 20) : 20
+        isVertical
+          ? isCollapse
+            ? theme.siderNormalWidth + 20
+            : theme.siderCollapseWidth + 20
+          : 20
       }px;`,
     ]"
     tag="main"

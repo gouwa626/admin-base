@@ -7,6 +7,7 @@ import '@/style/index.scss';
 import { importSvgIcons } from '@/utils/icon';
 
 importSvgIcons();
+import 'uno.css';
 (async () => {
   // 挂载配置文件
   window.$conf = await getConfig();

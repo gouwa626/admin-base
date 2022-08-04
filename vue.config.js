@@ -5,6 +5,7 @@ const Icons = require('unplugin-icons/webpack');
 const IconsResolver = require('unplugin-icons/resolver');
 const { FileSystemIconLoader } = require('unplugin-icons/loaders');
 const GenerateAssetWebpackPluginForWebpack5 = require('generate-asset-webpack-plugin-forwebpack5');
+const UnoCSS = require('unocss/webpack').default;
 const path = require('path');
 // build时构建配置文件
 const configJson = require('./src/config/prod.json');
@@ -94,6 +95,9 @@ module.exports = defineConfig({
         fn: (compilation, cb) => {
           cb(null, JSON.stringify(configJson));
         },
+      }),
+      UnoCSS({
+        /* options */
       }),
     ],
   },

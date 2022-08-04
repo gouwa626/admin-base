@@ -41,6 +41,7 @@ import type { FormInst, FormRules } from 'naive-ui';
 import { loginIn } from '@/api/login';
 import { useCookies } from '@vueuse/integrations/useCookies';
 import { useRouter } from 'vue-router';
+import { useEnumsDataStore } from '@/store';
 
 /** 表单规则 */
 const formRules = {
@@ -60,6 +61,7 @@ const rememberMe = ref(false);
 const loading = ref(false);
 const cookies = useCookies();
 const router = useRouter();
+const enumsDataStore = useEnumsDataStore();
 function handleSubmit(e: MouseEvent) {
   if (!formRef.value) return;
   e.preventDefault();
@@ -78,6 +80,8 @@ function handleSubmit(e: MouseEvent) {
               cookies.remove('userName');
               cookies.remove('password');
             }
+            // 更新枚举值
+            enumsDataStore.setEnumsDataData();
             setTimeout(() => {
               loading.value = false;
               router.push('/home');
